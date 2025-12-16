@@ -1,0 +1,10 @@
+paths:
+  fastq_raw:      "1_DATA/FASTQ/RAW"
+  fastq_clean:    "1_DATA/FASTQ/CLEAN"
+  reference:      "1_DATA/REFERENCE"
+  analyses:       "2_ANALYSES"
+
+cluster:
+  threads: 8
+  memory: "32G"
+  queue: "short"

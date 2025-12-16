@@ -1,0 +1,560 @@
+---
+title: "Tutorial para la elaboración del informe final del módulo en un notebook de Quarto"
+author: "David Martín-Gálvez"
+date: today
+format:
+  html: 
+    theme: default
+    toc: true
+    number-sections: true
+    embed-resources: true
+editor: source
+execute: 
+  eval: false
+  echo: true
+---
+
+## Análisis de los datos de RNAseq de los gorriones de la Facultad de Ciencias de la UGR
+
+Pasos generales a seguir:
+
+1.  Revisar el contexto (objetivos, metodología, datos, secuencias, ubicaciones...)
+2.  Análisis bioinformático de las secuencias en picasso.
+    1.  Copiar todas las secuencias a picasso.
+    2.  Revisar los análisis y resultados de los análisis realizados con los pilotos.
+    3.  Hacer el análisis para todas las muestras seleccionadas.
+
+
+## 1.  Revisar el contexto (objetivos, metodología, datos, secuencias, ubicaciones...)
+
+## 2.  Análisis bioinformático de las secuencias en picasso.
+
+### 2.1.  Copiar todas las secuencias a picasso.
+
+##### 2.1.1 Creación del usuario nasssh y configuración desde picasso
+Las secuencias están guardadas en la nas, dentro de la carpeta 1_SEQUENCING_RAW.
+He creado un usuario `nasssh`perteneciente al group `ssh_no_admin` para que pueda acceder a la nass desde cualquier servidor a traves de `ssh` pero con permisos limitados. Solo puede acceder a su `home`y a la carpeta `/volumen1/ 1_SEQUENCING_RAW/`. Para poder modificar los permisos de la `home`lo que he hecho es dar permisos 700 a todas las carpetas de `/volumen1/homes` 
+
+Así de esta manera me puedo conectar de forma segura desde picasso y no podre ver nada de las homes de los otros usuarios, por chmod 700, y solo me podré conectar a `/volumen1/ 1_SEQUENCING_RAW/`, por como he configurado los permisos ACL del usuario `nasssh`.
+
+### 2.1.2. Creación de las carpetas del proyecto en Picasso y en Serendipia
+
+Voy a probar esta opción que me recomienda chatGPT, en vez de montar picasso con sshfs.
+
+**VS Code Remote–SSH (La recomendada para HPC)**
+
+Con esto voy a poder:
+✔ editar archivos directamente en el cluster
+✔ abrir terminales remotos en Picasso desde VS Code
+✔ navegar carpetas del HPC sin montar nada
+✔ cero problemas con SSHFS
+✔ super estable para pipelines bioinformáticos
+
+**Configuración**
+
+1️⃣ Instalar la extensión en VS Code
+	•	Remote - SSH
+	•	Remote - SSH: Editing Configuration Files (opcional)
+
+2️⃣ Modifico la entrada SSH para Picasso en `.ssh/config`
+# -------- Picasso UGR / SCBI --------
+``` {bash}
+Host picasso
+    HostName picasso.scbi.uma.es
+    User dmartin
+    IdentityFile ~/.ssh/id_ed25519_picasso
+    IdentitiesOnly yes
+    # Mantener viva la conexión (evita desconexiones en VS Code)
+    ServerAliveInterval 60
+    ServerAliveCountMax 5
+    # Evita el error "Too many authentication methods"
+    PreferredAuthentications publickey
+    # Para Remote-SSH de VS Code (muy importante)
+    ForwardAgent yes
+```
+
+
+
+3️⃣ Probar conexión SSH desde tu Mac
+
+En el terminal:
+
+ssh picasso
+
+Si entra sin contraseña: perfecto.
+Si pide contraseña, revisamos las claves (yo te ayudo).
+
+⸻
+
+4️⃣ Conectar VS Code al cluster
+
+En VS Code:
+	1.	Pulsa F1
+	2.	Escribe: Remote-SSH: Connect to Host…
+	3.	Elige picasso
+	4.	VS Code abrirá una ventana nueva:
+“Installing VS Code Server on host…”
+
+Después verás tu árbol de carpetas del cluster en el panel izquierdo.
+Igual que si fuera una carpeta local.
+
+⸻
+
+5️⃣ Abrir carpeta del proyecto en el cluster
+
+Una vez conectado:
+	1.	En la barra izquierda, pulsa Open Folder
+	2.	Selecciona (por ejemplo):
+
+/home/TU_USUARIO/proyectos/rna-seq-gorriones
+
+(si no existe, la creas)
+
+Ahora estás editando DIRECTAMENTE en Picasso sin SSHFS.
+
+⸻
+
+6️⃣ Terminal remota del cluster dentro de VS Code
+
+Pulsa:
+
+Ctrl + `
+
+O:
+
+Terminal > New Terminal
+
+Y VS Code abrirá una terminal en Picasso, no en tu Mac.
+
+👉 Aquí puedes ejecutar:
+
+sbatch slurm/fastqc.sbatch
+
+o cualquier cosa del cluster.
+
+⸻
+
+7️⃣ Extensiones útiles (instaladas en el servidor remoto)
+
+Cuando VS Code te diga:
+
+“The extension is recommended to install on the remote host”
+
+Di que sí y se instalarán en Picasso:
+	•	Python
+	•	Bash syntax
+	•	YAML
+	•	GitLens
+	•	Quarto (opcional si procesas docs en el cluster)
+
+⸻
+
+8️⃣ Flujo recomendado (muy profesional)
+
+🟢 En tu Mac:
+	•	Quarto
+	•	Documentación del proyecto
+	•	Repositorio git
+	•	Previsualizas resultados
+
+🟢 En el cluster:
+	•	Scripts
+	•	Entornos con conda/module
+	•	FastQC, STAR, salmon, etc.
+	•	Slurm jobs
+
+🟢 Sincronización:
+
+Usa git:
+
+En Picasso:
+
+git pull
+
+En tu Mac:
+
+git push
+
+Mucho más profesional que editar todo directamente en el HPC.
+
+⸻
+
+✔️ BENEFICIOS de Remote-SSH VS SSHFS
+
+Remote-SSH	SSHFS
+Estable	Inestable
+No necesita montar nada	Montaje propenso a fallos
+Siempre rápido	Lento con miles de archivos
+No interfiere con NFS/HPC	Puede bloquear filesystem del cluster
+Extensiones funcionan	Muchas fallan
+Manejo ideal de permisos	Permisos pueden corromperse
+El estándar en HPC profesionales	Nombrado como mala práctica
+
+
+⸻
+
+🎉 Ya lo tienes listo
+
+Si quieres, te configuro ahora mismo:
+	•	el archivo ~/.ssh/config
+	•	la estructura de carpetas del proyecto en Picasso
+	•	un script Slurm template optimizado para UGR
+	•	cómo sincronizar automáticamente con git
+	•	cómo integrar Quarto + HPC
+
+¿Te preparo el .ssh/config exacto para Picasso?
+
+
+
+---
+
+
+
+## Introducción al uso de documentos Quarto
+
+Este documento sirve como **tutorial** para la elaboración del informe final mediante la creación de un **Notebook** con **Quarto**. En particular, aprenderás a crear, estructurar y presentar correctamente el informe final del módulo, combinando texto explicativo, código y resultados. Incluye ejemplos de cómo escribir texto en Markdown y cómo estructurar, comentar y ejecutar código en `R` dentro de un mismo documento.
+
+Quarto permite combinar texto explicativo, código y resultados en un único archivo. Para crear y renderizar documentos `.qmd`, necesitas tener instalado el programa **Quarto** en tu sistema.
+
+> Además de este tutorial, en el campus virtual encontrarás el archivo `Plantilla_informe_final.qmd`, que podrás usar como base para elaborar tu propio informe.
+
+------------------------------------------------------------------------
+
+## Instalación de Quarto
+
+Antes de comenzar, asegúrate de tener instalado **Quarto**.
+
+1.  Descarga el programa desde la página oficial:\
+    <https://quarto.org/download/>
+2.  Instálalo siguiendo las instrucciones para tu sistema operativo (Windows, macOS o Linux).
+3.  [Opcional, uso avanzado.]{style="color: red; font-weight: bold; background-color: yellow"} Puedes comprobar que funciona correctamente desde la **Terminal** o desde la pestaña `Terminal` de `RStudio` con el comando:
+
+``` bash
+quarto check
+```
+
+> **Nota:** La consola de RStudio (`Console`) no reconoce comandos de la terminal.\
+> Usa la pestaña *Terminal* o ejecuta el comando fuera de RStudio.
+
+4.  Instala también el paquete de R `quarto`, que permite renderizar documentos desde la consola de R:
+
+``` r
+install.packages("quarto")
+```
+
+5.  Verifica la instalación con:
+
+``` r
+quarto::quarto_version()
+```
+
+------------------------------------------------------------------------
+
+## Estructura básica de un documento Quarto
+
+Todo documento `.qmd` comienza con un bloque **YAML**, delimitado por tres guiones (`---`). Actúa como la portada técnica del documento, donde defines los metadatos principales del informe: título, autor, fecha, formato, tema, etc.
+
+Ejemplo de encabezado YAML sencillo:
+
+``` markdown
+---
+title: "Informe Final: Análisis de IgY en abubillas"
+author: "Nombre Apellido"
+format: html
+---
+```
+
+Después del encabezado, comienza el cuerpo del documento, escrito en **Markdown**, un lenguaje sencillo que permite combinar texto, listas, ecuaciones, tablas y código.
+
+------------------------------------------------------------------------
+
+## Ejemplos básicos de escritura en Markdown
+
+### Encabezados
+
+Usa almohadillas (`#`) para crear títulos y subtítulos jerárquicos:
+
+``` markdown
+# Título principal (nivel 1)
+## Subtítulo (nivel 2)
+### Subtítulo menor (nivel 3)
+#### Subtítulo de nivel 4
+```
+
+### Énfasis y formato de texto
+
+-   **Negrita**: `**texto**`\
+-   *Cursiva*: `*texto*`\
+-   ~~Tachado~~: `~~texto~~`\
+-   Ecuaciones: `$E = mc^2$` $E = mc^2$
+-   `Código`: `` `texto` ``\
+-   Bloque de código: ```` ```texto``` ````
+
+### Listas
+
+**Lista con viñetas:**
+
+*Markdown:*
+
+``` markdown
+- Elemento 1
+- Elemento 2
+  - Sub-elemento 2.1
+  - Sub-elemento 2.2
+- Elemento 3
+```
+
+*Resultado:*
+
+-   Elemento 1
+-   Elemento 2
+    -   Sub-elemento 2.1
+    -   Sub-elemento 2.2
+-   Elemento 3
+
+**Lista numerada:**
+
+*Markdown:*
+
+``` markdown
+1. Primer paso
+2. Segundo paso
+   1. Sub-paso 2.1
+   2. Sub-paso 2.2
+3. Tercer paso
+```
+
+*Resultado:*
+
+1.  Primer paso
+2.  Segundo paso
+    1.  Sub-paso 2.1
+    2.  Sub-paso 2.2
+3.  Tercer paso
+
+### Enlaces e imágenes
+
+*Markdown:*
+
+``` markdown
+[Página web de Quarto](https://quarto.org)
+
+![Logo de Quarto](images/logo_quarto.png)
+```
+
+*Resultado:*
+
+[Página web de Quarto](https://quarto.org)
+
+![Logo de Quarto](images/logo_quarto.png)
+
+### Tablas
+
+*Markdown:*
+
+``` markdown
+| Variable | Descripción              | Tipo       |
+|-----------|--------------------------|------------|
+| igY       | Inmunoglobulina Y        | Numérica   |
+| behav     | Comportamiento migratorio | Categórica |
+```
+
+*Resultado:*
+
+| Variable | Descripción               | Tipo       |
+|----------|---------------------------|------------|
+| igY      | Inmunoglobulina Y         | Numérica   |
+| behav    | Comportamiento migratorio | Categórica |
+
+### HTML embebido. [Uso avanzado.]{style="color: red; font-weight: bold; background-color: yellow"}
+
+Markdown y HTML pueden combinarse libremente en un mismo documento Quarto, lo que ofrece un control visual muy flexible. Por ejemplo, puedes usar etiquetas **HTML** dentro del texto para personalizar el formato, el color o el estilo de presentación:
+
+*Markdown:*
+
+``` html
+<p style="color: darkgreen; font-weight: bold;">Texto en verde y negrita.</p>
+
+<div style="background-color: #f0f0f0; padding: 10px; border-radius: 5px;">
+Este texto aparece dentro de un cuadro sombreado.
+</div>
+```
+
+*Resultado:*
+
+<p style="color: darkgreen; font-weight: bold;">
+
+Texto en verde y negrita.
+
+</p>
+
+::: {style="background-color: #f0f0f0; padding: 10px; border-radius: 5px;"}
+Este texto aparece dentro de un cuadro sombreado.
+:::
+
+## Cómo incluir código ejecutable en Quarto
+
+En Quarto (y R Markdown) el código ejecutable se inserta en **bloques o “chunks”**. Cada chunk se abre con tres tildes invertidas seguidas del identificador del lenguaje (por ejemplo, ```` ```{r} ````), y se cierra con tres tildes más en una nueva línea (```` ``` ````). Quarto, además de `R`, reconoce otros muchos lenguajes de programación.
+
+### Opciones para la ejecución de los *chunks* de código. [Uso avanzado.]{style="color: red; font-weight: bold; background-color: yellow"}
+
+Los **chunks** en Quarto permiten el uso opciones que controlan cómo se ejecutan y muestra el código. Esas opciones se pueden añadir tras una coma dentro de las llaves de los corchetes de la primera línea `{r, opción1=valor1, opción2=valor2}`, o bien, poniendo cada una de las opciónes en una línea separada despues de la primer del chunk siguiendo este formato `#| opción: valor`.
+
+A continuación se listan algunas de las más comunes:
+
+| Opción | Descripción | Ejemplo dentro de corchete | Ejemplo en línea aparte |
+|-----------------|---------------------|-----------------|-----------------|
+| `echo` | Muestra (`TRUE`) o oculta (`FALSE`) el código. | `{r, echo=FALSE}` | `#| echo: false` |
+| `eval` | Ejecuta (`TRUE`) o no ejecuta (`FALSE`) el código. | `{r, eval=FALSE}` | `#| eval: false` |
+| `include` | Incluye el bloque en el documento final (`TRUE`/`FALSE`). | `{r, include=FALSE}` | `#| include: false` |
+| `results` | Controla cómo se muestran los resultados (`show`, `hide`, `asis`). | `{r, results='hide'}` | `#| results: hide` |
+| `label` | Para dar nombre el chunk | `{r nombre}` o `{r, label="nombre"}` | `#| label: nombre` |
+
+Otras menos comunes:
+
+| Opción | Descripción | Ejemplo dentro de corchete | Ejemplo en línea aparte |
+|-----------------|---------------------|-----------------|-----------------|
+| `fig.width`, `fig.height` | Controlan el tamaño de las figuras. | `{r, fig.width=6, fig.height=4}` | `#| fig.width: 6` `#| fig.height: 4` |
+| `fig.cap` | Añade un pie de figura. | `{r, fig.cap="Figura 1: Boxplot de IgY"}` | `#| fig.cap: "Figura 1: Boxplot de IgY"` |
+| `fig.align` | Alinea la figura (`default`, `left`, `center`, `right`). | `{r, fig.align='center'}` | `#| fig.align: center` |
+| `message` | Muestra los mensajes generados (por ejemplo al cargar librerías). | `{r, message=FALSE}` | `#| message: false` |
+| `warning` | Muestra o suprime las advertencias. | `{r, warning=FALSE}` | `#| warning: false` |
+
+### Opciones por defecto para la ejecución de los chunks. [Uso avanzado.]{style="color: red; font-weight: bold; background-color: yellow"}
+
+Puedes establecer las opciones de ejecución por defecto para todos los chunks de tu documento en el encabezado *YMAL* del documento, dentro del grupo `execute`, de esta manera:
+
+``` markdown
+---
+title: "Informe Final: Análisis de IgY en abubillas"
+author: "Nombre Apellido"
+format: html
+execute:
+  echo: true
+  eval: true
+---
+```
+
+O bien, puedes establecer opciones por defecto para todos los **chunks** en la parte inicial del documento, incluyendo en un **chunk** en `R` el comando
+
+``` r
+knitr::opts_chunk$set(opcion1 = valor1, opcion2 = valor2, ...)
+```
+
+Por ejemplo:
+
+``` r
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+> **Nota:** Cualquier opción por defecto para todo el documento puede ser invalidada para un determinado **chunk** al establecerse un nuevo valor para esa opción dentro de ese **chunk**.
+
+------------------------------------------------------------------------
+
+## Renderización de un documento Quarto
+
+**Renderizar** significa *compilar* o *transformar* tu documento `.qmd` en un formato final legible (por ejemplo **HTML**, **PDF** o **Word**). Este proceso ejecuta todo el código del documento y combina los resultados con el texto y el formato para generar el informe final.
+
+Durante este proceso, Quarto ejecuta los *chunks* de código, inserta en el texto aquello que hayas configurado como salida en los chunks (código, resultados, o ambos) y genera un archivo final con el formato indicado en el encabezado YAML.
+
+### Opciones de formato de salida
+
+Puedes renderizar tu documento en diferentes formatos modificando el bloque `format` de tu **YAML**. Por ejemplo:
+
+-   **HTML** (.html) (**recomendado**):
+
+    ``` yaml
+    format: html
+    ```
+
+-   **PDF** (.pdf) (*ver más adelante para los requerimientos*):
+
+    ``` yaml
+    format: pdf
+    ```
+
+-   **Word (.docx)**:
+
+    ``` yaml
+    format: docx
+    ```
+
+El archivo renderizado (HTML, PDF o DOCX) se creará en la misma carpeta donde se encuentra el archivo `.qmd`
+
+[Uso avanzado.]{style="color: red; font-weight: bold; background-color: yellow"} Si deseas que tu documento pueda renderizarse en distintos formatos (HTML, PDF y Word), puedes añadir más de una opción en el **YAML**, dentro del bloque `format`, de esta manera:
+
+``` yaml
+format:
+  html: default
+  pdf: default
+  docx: default
+```
+
+### Formas de renderizar tu informe:
+
+Tienes tres formas de renderizar tu informe
+
+1.  **Desde RStudio (recomendado):**
+    -   Abre tu archivo `.qmd`.
+    -   Pulsa el botón **Render** (indicado también con una flecha azul).
+    -   El formato de salida se define en el encabezado YAML (por ejemplo `format: html`).
+    -   En el desplegable de la rueda de engranaje al lado del botón **Render**, puedes configurar si la salida de la renderización se muestra en la pestaña `Viewer` del panel `Output` de `RStudio` (por defecto), o en tu explorador web (`Preview in Window`).
+
+> [Uso avanzado.]{style="color: red; font-weight: bold; background-color: yellow"} Si incluyes varios formatos en el YAML (HTML, PDF, DOCX), podrás elegir entre ellos usando las opciones en el desplegable de la rueda de engranaje al lado del botón **Render**.
+
+2.  [Uso avanzado.]{style="color: red; font-weight: bold; background-color: yellow"} **Desde la consola de R (si tienes el paquete `quarto` instalado):**
+
+    ``` r
+    quarto::quarto_render("Informe_IgY_ApellidoNombre.qmd")
+    ```
+
+    o especificando el formato:
+
+    ``` r
+    quarto::quarto_render("Informe_IgY_ApellidoNombre.qmd", output_format = "pdf")
+    ```
+
+3.  [Uso avanzado.]{style="color: red; font-weight: bold; background-color: yellow"} **Desde la terminal del sistema o el panel “Terminal” de RStudio:**
+
+    ``` bash
+    quarto render Informe_IgY_ApellidoNombre.qmd
+    ```
+
+    > **Nota:** La consola de RStudio no reconoce comandos de la terminal. Los comandos `quarto render` deben ejecutarse en la pestaña `Terminal`, si la tienes activada, o fuera de RStudio.
+
+------------------------------------------------------------------------
+
+### Generar documentos PDF. [Uso avanzado.]{style="color: red; font-weight: bold; background-color: yellow"}
+
+Para poder renderizar documentos en formato **PDF**, es necesario tener instalado un motor $LaTeX$. La opción más sencilla es instalar **TinyTeX**, una version ligera de $LaTeX$ que puede instalarse directamente desde R.
+
+Ejecuta estos comandos en la consola de R:
+
+``` r
+install.packages("tinytex")
+tinytex::install_tinytex()
+```
+
+Esto instalará tanto el paquete `tinytex` dentro de R como el motor $LaTeX$ completo en tu sistema (en una carpeta interna gestionada por R). Una vez instalado, Quarto y RStudio lo detectarán automáticamente cuando intentes renderizar un archivo `.qmd` a PDF.
+
+Puedes verificar que todo está correctamente instalado con:
+
+``` r
+tinytex::is_tinytex()
+```
+
+No es necesario realizar configuraciones adicionales: al pulsar **Render** con el formato `pdf` en el encabezado YAML, Quarto utilizará automáticamente TinyTeX para generar el archivo final.
+
+## Consejos finales
+
+-   Usa títulos y subtítulos (`##`, `###`) para estructurar el informe.
+-   Asegúrate de que todos los gráficos se generan correctamente al renderizar.
+-   Guarda tu informe con el nombre: `Informe_IgY_ApellidoNombre.qmd`.
+-   Renderiza y revisa el archivo generado antes de la entrega. La forma más sencilla es renderizar tu informe a `.html`.
+-   Entrega tanto el archivo `.qmd` como el archivo renderizado en el formato deseado (ejemplo, `.html`, `.pdf` o `.docx`).
+
+## Más información
+
+Este tutorial se basa en la documentación disponible en la página oficial de Quarto (<https://quarto.org>), donde también puedes encontrar recursos adicionales sobre la creación de notebooks y otros tipos de documentos reproducibles.
+
+------------------------------------------------------------------------

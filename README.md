@@ -1,52 +1,133 @@
 # Bioinformatics Project Template
 
-This repository provides a template for bioinformatics analysis projects (RNA-seq, metagenomics, variant calling, proteomics, etc.). It includes a standard folder structure, initialization scripts, and configuration guidance.
+A **generic, portable, and scalable template** for structuring any bioinformatics analysis project. Works seamlessly across **different analysis types** (RNA-seq, ChIP-seq, metagenomics, variant calling, single-cell, etc.) and **multiple computing environments** (macOS, HPC clusters, NAS storage).
 
-## Minimum Requirements
-- bash ≥ 4, coreutils, awk/sed/grep
-- `yq` to read YAML in shell
-- Git ≥ 2.30
-- Quarto (optional for documentation)
+## Key Features
 
-macOS (Homebrew):
+✅ **Analysis-agnostic** - Works with any bioinformatics tool or workflow  
+✅ **Portable** - Same scripts run on macOS, and HPC cluster without modification  
+✅ **Scalable** - From single-machine to HPC array jobs  
+✅ **Version-controlled** - Only scripts and config in repo, never large data  
+✅ **Reproducible** - Configuration system ensures identical results across environments  
+✅ **Secure** - SSH key management for cluster, GitHub, and NAS access  
+
+## Repository Structure
+
 ```
+bioinfo-project-repo/
+├── config/                    # Configuration files
+│   ├── config.yaml            # Shared, versioned paths & parameters
+│   └── config_local.yaml      # Machine-specific (never commit)
+├── scripts/
+│   ├── bash/                  # One-sample analysis scripts
+│   ├── slurm/                 # HPC job wrappers
+│   ├── setup/
+│   │   └── init_project.sh    # Initialize project folders
+│   └── utils/
+│       └── load_config.sh     # Load YAML configuration
+├── docs/
+│   └── bioinformatics_project_template.qmd    # Complete documentation
+└── README.md
+```
+
+## Quick Start
+
+### 1. Install Requirements
+
+**macOS:**
+```bash
 brew install yq git quarto rsync gnu-sed gawk
 ```
 
-## Initialize the Project
-```
-bash scripts/setup/init_project.sh
-```
-This creates base folders and configuration files under `config/`.
-
-## Configure Git and SSH Keys
-1. Generate a key:
-```
-ssh-keygen -t ed25519 -C "you@email" -f ~/.ssh/id_ed25519
-ssh-add ~/.ssh/id_ed25519
-```
-2. Add the public key to GitHub/GitLab and to your cluster account.
-3. Set remote and push:
-```
-git init && git add . && git commit -m "Init"
-git remote add origin https://github.com/<user>/<repo>.git
-git push -u origin main
+**Linux:**
+```bash
+sudo apt-get install yq git quarto rsync
 ```
 
-## Cluster Connection
-Configure `~/.ssh/config`:
-```
-Host cluster
-  HostName cluster.univ.es
-  User username
-  IdentityFile ~/.ssh/id_ed25519
-```
-Connect with:
-```
-ssh cluster
+### 2. Clone Template
+
+```bash
+git clone https://github.com/dmartingalvez/bioinfo-project-template.git
+cd bioinfo-project-template
 ```
 
-## Next Steps
-- Edit `config/config.yaml` and `config/config_local.yaml`.
-- Use templates under `scripts/templates/` to scaffold analyses.
-- Read the guide in `docs/bioinformatics_project_template.qmd`.
+### 3. View Complete Documentation
+
+📖 **[Read the full guide online](https://dmartingalvez.github.io/bioinfo-project-template/bioinformatics_project_template.html)** (hosted on GitHub Pages)
+
+Or view locally:
+
+```bash
+# Clone and open the HTML documentation
+git clone https://github.com/dmartingalvez/bioinfo-project-template.git
+cd bioinfo-project-template
+open docs/bioinformatics_project_template.html
+
+# Or render from source
+quarto render docs/bioinformatics_project_template.qmd --to html
+```
+
+## What's Included
+
+The complete guide covers:
+- **Configuration System** - How to manage paths across environments
+- **SSH Setup** - Secure access to GitHub, cluster, and NAS
+- **Project Structure** - Data organization best practices
+- **Script Architecture** - One-sample scripts + SLURM array jobs
+- **Storage Strategy** - Working across macOS, HOME, fstrat, and NAS
+- **Customization Examples** - Adapting for your analysis type
+
+## Key Principles
+
+1. **Repository** (`bioinfo-project-repo/`) - Only scripts, config, docs
+2. **Project Data** (`my-analysis/`) - Data and results, outside repo
+3. **Separation** - `1_DATA/` (inputs) and `2_ANALYSES/` (outputs)
+4. **Configuration** - `config.yaml` (versioned) + `config_local.yaml` (local)
+5. **Portability** - Scripts work unchanged on macOS, cluster, and NAS
+
+## How to Use This Template for Your Project
+
+This template is designed to be **forked or cloned** as the basis for your project-specific repository.
+
+**See the complete guide in** [docs/bioinformatics_project_template.qmd](docs/bioinformatics_project_template.qmd) for step-by-step instructions on:
+- Creating a project-specific repository
+- Customizing configuration files
+- Writing analysis-specific scripts
+- Generating sample lists
+- Testing locally before cluster execution
+
+## Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| SSH connection fails | Check `~/.ssh/config` and test with `ssh -v cluster` |
+| Missing `config_local.yaml` | Create it manually with your local paths (don't commit) |
+| Scripts not executable | Run `chmod +x scripts/bash/*.sh scripts/slurm/*.sbatch` |
+| SLURM job fails | Check job logs and verify `config/samples_list.txt` exists |
+
+## Key Resources
+
+- **Complete Documentation**: [docs/bioinformatics_project_template.qmd](docs/bioinformatics_project_template.qmd)
+- **Configuration System**: See Section 6 in the guide
+- **SSH Setup**: See Section 4 in the guide
+- **Creating Your Project**: See "Creating a Repository for Your Specific Project" in the guide
+
+## License
+
+This template is provided as-is for bioinformatics research and analysis.
+
+## Authors and Contributors
+
+- **David Martín-Gálvez** - Template design, configuration system, documentation
+- **Mercè Palacios** - Contributions and feedback
+
+## Contributing
+
+This template is designed to be adapted for different projects. Feel free to customize and extend it for your specific needs.
+
+## See Also
+
+- [Quarto Documentation](https://quarto.org)
+- [SLURM Job Scheduling](https://slurm.schedmd.com)
+- [yq YAML processor](https://github.com/mikefarah/yq)
+- [VS Code Remote-SSH](https://code.visualstudio.com/docs/remote/ssh)

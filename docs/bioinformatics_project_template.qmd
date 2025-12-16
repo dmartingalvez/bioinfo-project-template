@@ -10,53 +10,105 @@ format:
     embed-resources: true
 editor: source
 execute: 
+  enabled: false
   eval: false
   echo: true
 ---
 
-# Purpose
+# 1. Introduction
 
-A generalized template to structure bioinformatics analysis projects (RNA-seq, ChIP-seq, metagenomics, variant calling, proteomics, etc.). It covers:
-- Standard folder layout
-- Minimal software requirements
-- Initialization scripts
-- Git + SSH key setup and basic cluster access
+This document describes a **generic, flexible template** to structure any bioinformatics analysis project. It is designed to work across **different project types** (RNA-seq, ChIP-seq, metagenomics, variant calling, proteomics, single-cell analysis, long-read sequencing, computational chemistry, etc.) and **different computing environments** (local workstations, HPC clusters, cloud).
 
-# Minimal Software
+The template implements:
 
-- Shell & CLI:
+* A **standard folder layout** for organizing code, data, and results.
+* **Minimal software requirements** and installation instructions.
+* **Initialization scripts** to quickly scaffold new projects.
+* **Git + SSH key setup** and basic cluster access.
+* Separation of **shared configuration** and **machine-specific configuration**.
+* A **portable path system** based on `BASE_DIR` and `REPO_DIR`.
+* A repository that stores **scripts and configuration only**, never large data.
+* A project structure designed for use on **local machines**, **cluster**, and **NAS**.
+* **SLURM array job architecture** for scalable HPC execution.
+* **Multi-environment storage strategy** (macOS, HOME, fstrat, NAS).
+
+## 1.1 Configuration System
+
+The configuration system consists of:
+
+* `config.yaml` → *shared*, versioned configuration; same for all users and machines.
+* `config_local.yaml` → *private*, unversioned configuration; machine-specific.
+* `load_config.sh` → loader that reads both YAML files with `yq` and exposes variables to Bash/SLURM.
+
+This ensures complete reproducibility, portability, and clarity across different computing environments.
+
+## 1.2 Key Principles
+
+* **Scripts never hard-code paths** — all paths are derived from configuration.
+* **Data lives outside the repository** — only scripts and configuration are version-controlled.
+* **One-sample Bash scripts** can be tested locally or used in SLURM array jobs.
+* **Clear separation** between DATA (inputs) and ANALYSES (outputs).
+* **Portable across environments** — only `BASE_DIR` and `REPO_DIR` change between machines.
+
+## 1.3 Why This Template is Generic
+
+This template is **not specific to any analysis type**. Instead, it provides:
+
+* **Flexible naming** for scripts and directories (adapt `01_analysis_one_sample.sh` to your analysis).
+* **Customizable paths** in `config.yaml` (use `raw_data`, `sequences`, `alignments`, or your own naming).
+* **Agnostic architecture** (works with any tool: FastQC, STAR, samtools, bcftools, Mothur, QIIME2, R, Python, etc.).
+* **Scalable design** (from single-machine to HPC array jobs).
+
+Examples of how to adapt for different projects:
+
+| Project Type | Sample Definition | Input Files | Analysis Steps |
+|---|---|---|---|
+| RNA-seq | Sample ID | FASTQ files | QC → Trim → Map → Count → DE |
+| ChIP-seq | Replicate ID | BAM files | QC → Peak call → Annotate |
+| Metagenomics | Sample ID | FASTQ files | QC → Denoise → Taxonomy → Abundance |
+| Variant calling | Sample ID | FASTQ/BAM files | QC → Map → Call → Annotate → Filter |
+| Single-cell | Cell barcode | h5ad/mtx files | QC → Normalize → Cluster → Annotate |
+
+---
+
+# 2. Minimal Software
+
+## 2.1 Required Software
+
+- **Shell & CLI:**
   - bash ≥ 4.0, coreutils, `awk`, `sed`, `grep`, `rsync`, `tar`, `gzip`
-- YAML:
+- **YAML:**
   - `yq` (mikefarah/yq) to read YAML with bash
-- Documentation:
+- **Documentation:**
   - Quarto (optional but recommended): https://quarto.org
-- VCS:
+- **VCS:**
   - Git ≥ 2.30
-- Optional (depending on analysis):
-
-  <!-- - Conda/Mamba for reproducible environments
+- **Optional (depending on analysis):**
+  - Conda/Mamba for reproducible environments
   - Snakemake or Nextflow for workflows
-  - R (≥4.2) and/or Python (≥3.10) -->
+  - R (≥4.2) and/or Python (≥3.10)
 
-Quick install (macOS):
+## 2.2 Quick Install (macOS)
 
 First, install Homebrew if you don't have it (https://brew.sh):
 
-```bash
+``` {bash}
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
 Then install the required packages:
 
-```bash
+```{bash}
 brew install yq git quarto rsync gnu-sed gawk
 ```
 
-# Git Setup
+---
+
+# 3.# 3.1 Initialize Repository
 
 Initialize and connect to remote:
 
-```bash
+```{bash}
 git init
 # create the remote on GitHub/GitLab, then:
 git remote add origin https://github.com/<user>/<repo>.git
@@ -67,104 +119,561 @@ git commit -m "Initial template"
 git push -u origin main
 ```
 
+## 3.2 Configure .gitignore
+
 Ignore local files:
 
-```
+```{yaml}
 config/config_local.yaml
 analyses/
 data/processed/
 logs/
 ```
 
-# SSH Keys (Git + Cluster)
+Add to .gitignore:
 
-## Generate keys
+```{bash}
+echo "config/config_local.yaml" >> .gitignore
+```
 
-```bash
-ssh-keygen -t ed25519 -C "you@email" -f ~/.ssh/id_ed25519
-# start agent
+**Important:** `config_local.yaml` must never be committed as it contains machine-specific paths.
+
+---
+
+# 4. SSH Keys (Git, Cluster, and NAS)
+
+SSH keys enable secure, password-free authentication to remote servers. This section covers setup for GitHub, HPC clusters, and NAS storage.
+
+## 4.1 Generate SSH Keys
+
+Generate an ED25519 key pair (modern, secure standard):
+
+```{bash}
+ssh-keygen -t ed25519 -C "your-email@example.com" -f ~/.ssh/id_ed25519
+# Start SSH agent and add key
 ssh-agent -s
 ssh-add ~/.ssh/id_ed25519
+# Display public key (copy this to remote servers)
 cat ~/.ssh/id_ed25519.pub
 ```
 
-Copy the public key to:
-- GitHub/GitLab (SSH keys)
-- Cluster (`~/.ssh/authorized_keys` on your user account)
+**Important:** Keep `~/.ssh/id_ed25519` private. Only share `~/.ssh/id_ed25519.pub`.
 
-## Connect to the cluster
+## 4.2 Add Public Key to Remote Services
 
-```bash
-ssh user@cluster.univ.es
-# optional: add an alias
-cat >> ~/.ssh/config <<'CFG'
+### GitHub/GitLab SSH Setup
+
+1. Copy your public key from above (`cat ~/.ssh/id_ed25519.pub`)
+2. Add to GitHub:
+   - Go to GitHub → Settings → SSH and GPG keys
+   - Click "New SSH key" and paste your public key
+3. Test connection:
+
+```{bash}
+ssh -T git@github.com
+# Expected: "Hi <username>! You've successfully authenticated..."
+```
+
+### HPC Cluster SSH Setup
+
+Add your public key to the cluster's `~/.ssh/authorized_keys`:
+
+```{bash}
+# On your local machine, copy key to cluster
+ssh-copy-id -i ~/.ssh/id_ed25519.pub user@cluster.example.com
+# Or manually:
+cat ~/.ssh/id_ed25519.pub | ssh user@cluster.example.com "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+```
+
+### NAS Storage SSH Setup (Restricted Access)
+
+For security on shared NAS systems, create a restricted user with limited permissions:
+
+```{bash}
+# On NAS (typically done by admin)
+# Create user with SSH-only access, no shell
+useradd -m -s /usr/sbin/nologin -c "Restricted SSH user" data_ssh
+
+# Set ACL permissions to restrict access to specific folders
+setfacl -m u:data_ssh:rx /volume/shared_data/
+# This user can only read/execute, not write to parent directories
+```
+
+## 4.3 Configure SSH Client (`~/.ssh/config`)
+
+Create or edit `~/.ssh/config` to manage multiple SSH connections with appropriate settings for HPC:
+
+```{bash}
+# GitHub
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+
+# HPC Cluster (Picasso, XSEDE, etc.)
 Host cluster
-  HostName cluster.univ.es
-  User user
-  IdentityFile ~/.ssh/id_ed25519
-CFG
+    HostName cluster.example.com
+    User your_username
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+    # Keep connection alive (prevent disconnections)
+    ServerAliveInterval 60
+    ServerAliveCountMax 5
+    # Prevent "Too many authentication methods" error
+    PreferredAuthentications publickey
+    # Required for VS Code Remote-SSH
+    ForwardAgent yes
+
+# NAS Storage
+Host nas
+    HostName nas.example.com
+    User data_ssh
+    IdentityFile ~/.ssh/id_ed25519
+    IdentitiesOnly yes
+    StrictHostKeyChecking accept-new
+```
+
+## 4.4 Test SSH Connections
+
+```{bash}
+# Test cluster
 ssh cluster
+# Should connect without password
+
+# Test NAS
+ssh nas
+# Should connect without password
+
+# Test GitHub
+ssh -T github.com
 ```
 
-# Folder Structure
+## 4.5 VS Code Remote-SSH (Recommended for HPC)
+
+VS Code Remote-SSH allows you to edit files and run terminals directly on the cluster without mounting via SSHFS (which is unstable on HPC systems).
+
+### Setup
+
+1. **Install VS Code extensions:**
+   - `Remote - SSH`
+   - `Remote - SSH: Editing Configuration Files` (optional)
+
+2. **VS Code will auto-detect** entries from your `~/.ssh/config`
+
+3. **Connect to cluster:**
+   - Press `F1` (or `Cmd+Shift+P` on macOS)
+   - Type: `Remote-SSH: Connect to Host…`
+   - Select your cluster entry
+   - VS Code opens a new window and installs VS Code Server on the remote host
+
+4. **Open remote folder:**
+   - In the left sidebar, click "Open Folder"
+   - Navigate to your project directory (e.g., `/home/user/projects/my-analysis-repo`)
+   - You can now edit files directly on the cluster
+
+5. **Open remote terminal:**
+   - Press `Ctrl+`` (or `Cmd+`` on macOS)
+   - Executes commands on the cluster, not locally
+
+### Benefits of Remote-SSH vs SSHFS
+
+| Feature | Remote-SSH | SSHFS |
+|---------|-----------|-------|
+| Stability | ✅ Highly stable | ❌ Prone to failures |
+| Setup | ✅ None needed | ❌ Requires mounting |
+| Performance | ✅ Fast | ❌ Slow with many files |
+| Permissions | ✅ Correct handling | ❌ Can get corrupted |
+| Extensions | ✅ Work normally | ❌ Often fail |
+| HPC standard | ✅ Recommended | ❌ Problematic on clusters |
+
+## 4.6 Securing Permissions
+
+Ensure SSH directory permissions are correct:
+
+```{bash}
+# On both local and remote systems
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/id_ed25519
+chmod 644 ~/.ssh/id_ed25519.pub
+chmod 600 ~/.ssh/authorized_keys
+chmod 644 ~/.ssh/config
+```
+
+---
+
+# 5. Repository Structure
+
+This repository contains **only scripts and configuration**, never data or results.
 
 ```
-project-root/
-  README.md
-  config/
-    config.yaml            # project-level paths and parameters
-    config_local.yaml      # machine/cluster-specific absolute paths
-  docs/
-    bioinformatics_project_template.qmd  # this guide
-  scripts/
-    setup/
-      init_project.sh      # scaffolds folders and templates
-    utils/
-      load_config.sh       # load YAML into environment variables
-    templates/
-      job_slurm_template.sh
-      analysis_script_template.sh
-  analyses/                # results and reports
-  data/
-    raw/                   # original data (read-only)
-    processed/             # processed data
-  reference/               # genomes, annotations, indices
-  logs/                    # job logs (e.g., SLURM)
+bioinfo-project-repo/
+│
+├── config/
+│   ├── config.yaml              # Shared, versioned, portable paths
+│   └── config_local.yaml        # Local-only, ignored by Git
+│
+├── scripts/
+│   ├── bash/                    # One-sample analysis scripts
+│   ├── slurm/                   # Job submission wrappers (HPC)
+│   ├── setup/
+│   │   └── init_project.sh      # Scaffolds folders and templates
+│   └── utils/
+│       └── load_config.sh       # Loads YAML configuration
+│
+└── docs/
+    └── bioinformatics_project_template.qmd  # Project documentation
 ```
 
-Notes:
-- `config_local.yaml` may be untracked if it contains private paths — add to `.gitignore`.
-- Treat `data/raw` as immutable; never write into it.
+## 5.1 Key Principles
+
+* **No data** and **no results** in the repository.
+* Scripts are portable and reusable across machines.
+* Configuration is split between shared (`config.yaml`) and local (`config_local.yaml`).
+* `config_local.yaml` is **never committed** (add to `.gitignore`).
 
 
 
 
-# Configure `config.yaml` and `config_local.yaml`
+---
 
-Generic `config.yaml` example:
+# 6. Configuration System
+
+## 6.1 `config.yaml` (Shared, Versioned)
+
+Path: `config/config.yaml`
+
+This file contains **only relative paths** and **pipeline parameters**, never absolute paths.
+
+Generic example (adapt to your analysis type):
 
 ```yaml
 paths:
-  data_raw: data/raw
-  data_processed: data/processed
-  reference: reference
-  analyses: analyses
-project:
-  name: "my-analysis"
+  raw_data:       "1_DATA/RAW"
+  processed_data: "1_DATA/PROCESSED"
+  reference:      "1_DATA/REFERENCE"
+  analyses:       "2_ANALYSES"
+
 cluster:
   threads: 8
-  memory: "16G"
+  memory: "32G"
   queue: "short"
+  time_limit: "02:00:00"
 ```
 
-Local `config_local.yaml` example:
+### Key Rules
+
+* No absolute paths.
+* Stable across macOS, HOME, fstrat, NAS.
+* Versioned in Git.
+* Customize path names for your specific analysis type.
+
+## 6.2 `config_local.yaml` (Machine-Specific, Not Versioned)
+
+Path: `config/config_local.yaml`
+
+Examples:
+
+### macOS
 
 ```yaml
-base_dir: "~/Projects/my-analysis"
-repo_dir: "~/Projects/my-analysis/repo"
+base_dir: "/Users/david/my-analysis"
+repo_dir: "/Users/david/Repositories/my-analysis-repo"
 ```
 
-# Initialize the Project
+### Cluster HOME
+
+```yaml
+base_dir: "/mnt/home/users/.../my-analysis"
+repo_dir: "/mnt/home/users/.../my-analysis-repo"
+```
+
+### fstrat (execution workspace)
+
+```yaml
+base_dir: "/fstrat/dmartin/my-analysis/run_20251209"
+repo_dir: "/mnt/home/users/dba_001_uma/dmartin/my-analysis-repo"
+```
+
+### Add to `.gitignore`:
+
+```bash
+echo "config/config_local.yaml" >> .gitignore
+```
+
+**This file must never be committed.**
+
+## 6.3 `load_config.sh` – Merging Both Configurations
+
+Path: `scripts/utils/load_config.sh`
+
+```bash
+#!/bin/bash
+
+MAIN_CONFIG="config/config.yaml"
+LOCAL_CONFIG="config/config_local.yaml"
+
+if [[ ! -f "$MAIN_CONFIG" ]]; then
+    echo "ERROR: Missing config.yaml" >&2; exit 1
+fi
+if [[ ! -f "$LOCAL_CONFIG" ]]; then
+    echo "ERROR: Missing config_local.yaml" >&2; exit 1
+fi
+
+# Machine-specific base directory
+BASE_DIR=$(yq -r '.base_dir' "$LOCAL_CONFIG")
+REPO_DIR=$(yq -r '.repo_dir' "$LOCAL_CONFIG")
+
+# Relative paths from config.yaml
+RAW_REL=$(yq -r '.paths.fastq_raw' "$MAIN_CONFIG")
+CLEAN_REL=$(yq -r '.paths.fastq_clean' "$MAIN_CONFIG")
+REF_REL=$(yq -r '.paths.reference' "$MAIN_CONFIG")
+ANALYSES_REL=$(yq -r '.paths.analyses' "$MAIN_CONFIG")
+
+# Build absolute paths
+FASTQ_RAW_DIR="$BASE_DIR/$RAW_REL"
+FASTQ_CLEAN_DIR="$BASE_DIR/$CLEAN_REL"
+REFERENCE_DIR="$BASE_DIR/$REF_REL"
+ANALYSES_DIR="$BASE_DIR/$ANALYSES_REL"
+
+# Cluster parameters
+THREADS=$(yq -r '.cluster.threads' "$MAIN_CONFIG")
+MEMORY=$(yq -r '.cluster.memory' "$MAIN_CONFIG")
+QUEUE=$(yq -r '.cluster.queue' "$MAIN_CONFIG")
+```
+
+---
+
+# 7. Project Structure (Data + Results)
+
+This structure exists **outside the repository**, typically on NAS or local storage.
+
+```
+my-analysis/
+│
+├── 1_DATA/
+│   ├── RAW/                  # Original input files (read-only)
+│   │   ├── sequences/        # FASTQ, BAM, VCF, or other input formats
+│   │   └── metadata/
+│   │
+│   ├── REFERENCE/            # Reference data and indices
+│   │   ├── GENOME/           # Reference sequences (FASTA)
+│   │   ├── ANNOTATION/       # Gene annotations (GTF/GFF3/BED)
+│   │   └── INDEXES/          # Pre-built indices (tool-specific)
+│   │
+│   └── PROCESSED/            # Stable derived data (if needed)
+│       └── cleaned/
+│
+├── 2_ANALYSES/
+│   ├── Scripts/              # symlink to repository scripts
+│   └── Results/
+│       ├── 01_qc/            # Quality control outputs
+│       ├── 02_preprocessing/ # Trimming, filtering, etc.
+│       ├── 03_main_analysis/ # Primary analysis step
+│       ├── 04_tables/        # Results tables
+│       └── 05_figures/       # Plots and visualizations
+│
+├── 3_FIGURES/
+├── 4_TABLES/
+└── 5_PUBLICATION/
+```
+
+## 7.1 Key Principles
+
+* **DATA (`1_DATA/`)**: Contains inputs, never modified by pipeline.
+* **ANALYSES (`2_ANALYSES/`)**: Contains all outputs, can be regenerated.
+* Clear separation enables reproducibility and clean HPC workflows.
+
+---
+
+# 8. Script Architecture
+
+## 8.1 One-Sample Bash Scripts
+
+Path: `scripts/bash/01_analysis_one_sample.sh`
+
+Example for a generic analysis step:
+
+```bash
+#!/bin/bash
+
+SAMPLE_ID="$1"
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$SCRIPT_DIR/../.."
+cd "$REPO_ROOT" || exit 1
+
+source scripts/utils/load_config.sh
+
+# Define output directory for this step
+OUTDIR="$ANALYSES_DIR/03_main_analysis"
+mkdir -p "$OUTDIR"
+
+# Load tool (if using module system)
+if command -v module &> /dev/null; then
+    module load my-analysis-tool  # Replace with your actual tool
+else
+    echo "my-analysis-tool: no module system in this environment"
+fi
+
+# Run analysis on one sample
+my-analysis-tool --input "$RAW_DIR/${SAMPLE_ID}.data" \
+                 --output "$OUTDIR/${SAMPLE_ID}.results" \
+                 --threads "$THREADS"
+```
+
+This script architecture:
+* Processes **one sample** only.
+* Is independent of SLURM (runs locally or in HPC).
+* Can be tested on macOS, then scaled via SLURM arrays.
+* Uses configuration via `load_config.sh`.
+* Can be adapted to any bioinformatics tool or workflow step.
+
+## 8.2 Sample List File
+
+Generate a file listing sample identifiers (or other items to analyze) from your data.
+
+**Script location:** `scripts/utils/extract_samples_from_input.sh`
+
+### What it does
+
+* Extracts unique sample/item identifiers from input files.
+* Handles flexible input formats (directory listing, metadata file, etc.).
+* Auto-deduplicates and sorts.
+* Outputs to `config/samples_list.txt`.
+
+### Usage
+
+**Auto-detect input files:**
+
+```bash
+bash scripts/utils/extract_samples_from_input.sh
+```
+
+**Provide input explicitly:**
+
+```bash
+bash scripts/utils/extract_samples_from_input.sh /path/to/metadata.csv
+```
+
+### Output
+
+`config/samples_list.txt`:
+
+```
+SAMPLE_001
+SAMPLE_002
+SAMPLE_003
+SAMPLE_004
+SAMPLE_005
+```
+
+Each line corresponds to one array task index and can represent any item to analyze (sample, individual, region, etc.).
+
+## 8.3 SLURM Array Jobs
+
+Path: `scripts/slurm/01_analysis_array.sbatch`
+
+```bash
+#!/bin/bash
+#SBATCH --job-name=analysis_array
+#SBATCH --output=%x_%A_%a.out
+#SBATCH --error=%x_%A_%a.err
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=8G
+#SBATCH --time=02:00:00
+#SBATCH --partition=short
+#SBATCH --array=1-N      # Adjust N to match number of items in samples_list.txt
+
+REPO_ROOT="$HOME/Repositories/my-analysis-repo"
+cd "$REPO_ROOT" || exit 1
+
+source scripts/utils/load_config.sh
+
+SAMPLES_FILE="config/samples_list.txt"
+ITEM_ID=$(sed -n "${SLURM_ARRAY_TASK_ID}p" "$SAMPLES_FILE")
+
+echo "Processing item: $ITEM_ID (array task ${SLURM_ARRAY_TASK_ID})"
+
+# Call your one-sample script
+bash scripts/bash/01_analysis_one_sample.sh "$ITEM_ID"
+```
+
+### How it works
+
+* `SLURM_ARRAY_TASK_ID` provides task index (starting from 1 by default).
+* `sed` extracts corresponding line from samples list.
+* Each task launches the Bash script on a different item.
+* Submit: `sbatch scripts/slurm/01_analysis_array.sbatch`
+
+### Benefits
+
+* **Reusability**: Bash scripts tested locally, reused on HPC.
+* **Scalability**: SLURM arrays distribute samples efficiently.
+* **Clean architecture**: No duplication of logic.
+* **Flexibility**: Changing sample lists doesn't require editing scripts.
+
+---
+
+# 9. Storage Architecture (macOS, HOME, fstrat, NAS)
+
+## 9.1 Summary
+
+* **macOS:** Development, testing, documentation.
+* **HOME:** Repository + lightweight files.
+* **fstrat:** High-performance execution workspace (temporary).
+* **NAS:** Permanent project archive.
+
+All scripts behave identically because they rely on **BASE_DIR** and **REPO_DIR**.
+
+## 9.2 fstrat Execution Workspace (Per-Run)
+
+Within each run directory:
+
+```
+/fstrat/dmartin/my-analysis/run_20251209/
+│
+├── 1_DATA/        # minimal replicated inputs
+└── 2_ANALYSES/
+    ├── Scripts/   # symlink to repository scripts
+    └── Results/   # all outputs generated here
+```
+
+Create symlink:
+
+```bash
+ln -s "$REPO_DIR/scripts" "$BASE_DIR/2_ANALYSES/Scripts/scripts_repo"
+```
+
+This ensures traceability without duplicating code.
+
+## 9.3 Synchronizing Results from fstrat to NAS
+
+After execution:
+
+```bash
+rsync -av /fstrat/.../2_ANALYSES/ /NAS/my-analysis/2_ANALYSES/
+```
+
+This pattern allows:
+* Fast execution on cluster.
+* Durable storage on NAS.
+* Clean reproducibility.
+
+## 9.4 Environment-Dependent Configuration
+
+Only two variables change across machines:
+
+```yaml
+base_dir: "path/to/data_and_results"   # fstrat, NAS, or local path
+repo_dir: "path/to/repository"         # HOME on cluster, local path on macOS
+```
+
+All scripts use these paths indirectly through `load_config.sh`.
+
+---
+
+# 10. Initialize the Project
 
 Use `scripts/setup/init_project.sh` to create folders and templates:
 
@@ -173,18 +682,46 @@ bash scripts/setup/init_project.sh
 ```
 
 This script will:
-- Create base folders (`data/raw`, `data/processed`, `reference`, `analyses`, `logs`)
-- Copy script templates (`scripts/templates`)
+- Create base folders (`1_DATA`, `2_ANALYSES`, `3_FIGURES`, etc.)
+- Copy script templates
 - Create `config/config.yaml` and `config/config_local.yaml` if missing
 
-# Best Practices
+---
 
-- Always `source scripts/utils/load_config.sh` at the start of analysis scripts.
-- Never modify `data/raw`; write outputs to `data/processed` or `analyses`.
-- Track only code and generic config; keep large data out of the repo (or use Git LFS).
-- Document in `docs/` and publish reports with Quarto.
+# 11. Best Practices
 
-# Next Steps
+* Always `source scripts/utils/load_config.sh` at the start of analysis scripts.
+* Never modify `1_DATA/` during analyses; write outputs to `2_ANALYSES/`.
+* Track only code and generic config; keep large data out of the repo.
+* Document in `docs/` and publish reports with Quarto.
+* Use SLURM array jobs for scalable parallel processing.
+* Test one-sample scripts locally before submitting array jobs.
+* Synchronize results from fstrat to NAS after each run.
 
-- Add workflows (Snakemake/Nextflow) tailored to your analysis.
+---
+
+# 12. Summary
+
+* `config.yaml` → shared, versioned, general settings.
+* `config_local.yaml` → local, private, machine-specific.
+* `load_config.sh` → merges both and exposes variables.
+* All scripts use `source load_config.sh` for consistent paths.
+* One-sample Bash scripts can be tested locally or used in SLURM arrays.
+* Clear separation between DATA (inputs) and ANALYSES (outputs).
+* Portable across macOS ↔ HOME ↔ fstrat ↔ NAS.
+* Ensures full reproducibility, separation of concerns, and portability.
+
+---
+
+# 13. Next Steps
+
+Before you start:
+- **Configure SSH keys** for secure, password-free access to GitHub, cluster, and NAS (see Section 4).
+- **Set up `.ssh/config`** to manage multiple connections efficiently.
+- **Install VS Code Remote-SSH** for seamless cluster interaction.
+
+For your project:
+- Adapt scripts to your specific analysis pipeline.
+- Add workflows (Snakemake/Nextflow) for complex dependencies.
 - Create reproducible environments (`environment.yml`, `renv.lock`, or `requirements.txt`).
+- Document analysis steps and parameters in Quarto reports.

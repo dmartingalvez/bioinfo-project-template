@@ -69,6 +69,71 @@ Examples of how to adapt for different projects:
 | Variant calling | Sample ID | FASTQ/BAM files | QC → Map → Call → Annotate → Filter |
 | Single-cell | Cell barcode | h5ad/mtx files | QC → Normalize → Cluster → Annotate |
 
+## 1.4 How to Use This Template
+
+This repository is configured as a **GitHub Template Repository**, which allows you to create new projects without copying the full Git history.
+
+### Creating a New Project from Template
+
+1. **On GitHub:**
+   - Navigate to https://github.com/dmartingalvez/bioinfo-project-template
+   - Click the green **"Use this template"** button (top right)
+   - Select **"Create a new repository"**
+   - Fill in:
+     - **Owner:** Your username or organization
+     - **Repository name:** Your project name (e.g., `sparrow-rnaseq-analysis`)
+     - **Description:** Brief project description
+     - **Visibility:** Public or Private (your choice)
+   - Click **"Create repository"**
+
+2. **Clone your new repository:**
+   ```bash
+   git clone git@github.com:<your-username>/<your-project>.git
+   cd <your-project>
+   ```
+
+3. **Customize for your project:**
+   - Edit `README.md`: Update title, description, and project-specific information
+   - Edit `config/config.yaml`: Adjust paths and parameters for your analysis type
+   - Create `config/config_local.yaml`: Add your machine-specific paths
+   - Update `docs/`: Rename QMD files and customize documentation
+   - Adapt scripts in `scripts/bash/`: Rename and modify for your specific analysis steps
+   - Create sample list: Generate `config/samples_list.txt` with your sample identifiers
+
+4. **Initialize project structure:**
+   ```bash
+   bash scripts/setup/init_project.sh
+   ```
+
+### Advantages of Template Repository vs Manual Cloning
+
+| Aspect | Template Repository | Manual Clone |
+|--------|-------------------|--------------|
+| Git history | ✅ Clean start | ❌ Inherits all template history |
+| GitHub connection | ✅ Automatic | ❌ Requires remote reset |
+| Simplicity | ✅ One-click creation | ❌ Manual `rm -rf .git` needed |
+| Updates | ✅ Independent | ❌ Conflicts with template updates |
+| Best practice | ✅ Recommended | ❌ Not recommended |
+
+### After Creating Your Project
+
+1. **Configure Git identity** (if not already set globally):
+   ```bash
+   git config user.name "Your Name"
+   git config user.email "your.email@example.com"
+   ```
+
+2. **Set up SSH keys** (see Section 4 for detailed instructions)
+
+3. **Create machine-specific configuration:**
+   ```bash
+   # Example config/config_local.yaml
+   echo "base_dir: \"/path/to/your/project/data\"" > config/config_local.yaml
+   echo "repo_dir: \"$PWD\"" >> config/config_local.yaml
+   ```
+
+4. **Start developing:** Add your data paths, customize scripts, and begin analysis
+
 ---
 
 # 2. Minimal Software

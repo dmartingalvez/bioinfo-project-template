@@ -535,12 +535,14 @@ my-analysis/
 │       ├── 02_preprocessing/ # Trimming, filtering, etc.
 │       ├── 03_main_analysis/ # Primary analysis step
 │       ├── 04_tables/        # Results tables
-│       └── 05_figures/       # Plots and visualizations
+│       └── 05_figures/        # Plots and visualizations
 │
 ├── 3_FIGURES/
 ├── 4_TABLES/
 └── 5_PUBLICATION/
 ```
+
+Note: prefer creating these folders incrementally as bioinformatics analysis steps are executed and needed. There is no need to pre-create the entire structure; scripts can create required paths on demand (for example, `init_project.sh` and analysis scripts create `2_ANALYSES/Results/<step>` when appropriate). This approach avoids empty directories, reduces organizational errors, and improves traceability.
 
 ## Key Principles
 

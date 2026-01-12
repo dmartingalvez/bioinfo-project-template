@@ -2274,17 +2274,19 @@ vertical-align: -.125em;
   </ul></li>
   <li><a href="#script-architecture" id="toc-script-architecture" class="nav-link" data-scroll-target="#script-architecture"><span class="header-section-number">8</span> Script Architecture</a>
   <ul class="collapse">
-  <li><a href="#one-sample-bash-scripts" id="toc-one-sample-bash-scripts" class="nav-link" data-scroll-target="#one-sample-bash-scripts"><span class="header-section-number">8.1</span> One-Sample Bash Scripts</a></li>
-  <li><a href="#sample-list-file" id="toc-sample-list-file" class="nav-link" data-scroll-target="#sample-list-file"><span class="header-section-number">8.2</span> Sample List File</a>
+  <li><a href="#one-sample-bash-scripts" id="toc-one-sample-bash-scripts" class="nav-link" data-scroll-target="#one-sample-bash-scripts"><span class="header-section-number">8.1</span> One-Sample Bash Scripts</a>
   <ul class="collapse">
-  <li><a href="#what-it-does" id="toc-what-it-does" class="nav-link" data-scroll-target="#what-it-does"><span class="header-section-number">8.2.1</span> What it does</a></li>
-  <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage"><span class="header-section-number">8.2.2</span> Usage</a></li>
-  <li><a href="#output" id="toc-output" class="nav-link" data-scroll-target="#output"><span class="header-section-number">8.2.3</span> Output</a></li>
+  <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage"><span class="header-section-number">8.1.1</span> Usage</a></li>
+  <li><a href="#example-implementation" id="toc-example-implementation" class="nav-link" data-scroll-target="#example-implementation"><span class="header-section-number">8.1.2</span> Example Implementation</a></li>
+  <li><a href="#sample-list-format" id="toc-sample-list-format" class="nav-link" data-scroll-target="#sample-list-format"><span class="header-section-number">8.1.3</span> Sample List Format</a></li>
   </ul></li>
-  <li><a href="#slurm-array-jobs" id="toc-slurm-array-jobs" class="nav-link" data-scroll-target="#slurm-array-jobs"><span class="header-section-number">8.3</span> SLURM Array Jobs</a>
+  <li><a href="#slurm-array-jobs" id="toc-slurm-array-jobs" class="nav-link" data-scroll-target="#slurm-array-jobs"><span class="header-section-number">8.2</span> SLURM Array Jobs</a>
   <ul class="collapse">
-  <li><a href="#how-it-works" id="toc-how-it-works" class="nav-link" data-scroll-target="#how-it-works"><span class="header-section-number">8.3.1</span> How it works</a></li>
-  <li><a href="#benefits" id="toc-benefits" class="nav-link" data-scroll-target="#benefits"><span class="header-section-number">8.3.2</span> Benefits</a></li>
+  <li><a href="#quick-start" id="toc-quick-start" class="nav-link" data-scroll-target="#quick-start"><span class="header-section-number">8.2.1</span> Quick Start</a></li>
+  <li><a href="#how-it-works" id="toc-how-it-works" class="nav-link" data-scroll-target="#how-it-works"><span class="header-section-number">8.2.2</span> How It Works</a></li>
+  <li><a href="#example-slurm-script" id="toc-example-slurm-script" class="nav-link" data-scroll-target="#example-slurm-script"><span class="header-section-number">8.2.3</span> Example SLURM Script</a></li>
+  <li><a href="#key-features" id="toc-key-features" class="nav-link" data-scroll-target="#key-features"><span class="header-section-number">8.2.4</span> Key Features</a></li>
+  <li><a href="#important-log-directory-requirements" id="toc-important-log-directory-requirements" class="nav-link" data-scroll-target="#important-log-directory-requirements"><span class="header-section-number">8.2.5</span> Important: Log Directory Requirements</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#storage-architecture-macos-home-fstrat-nas" id="toc-storage-architecture-macos-home-fstrat-nas" class="nav-link" data-scroll-target="#storage-architecture-macos-home-fstrat-nas"><span class="header-section-number">9</span> Storage Architecture (macOS, HOME, fstrat, NAS)</a>
@@ -2295,9 +2297,17 @@ vertical-align: -.125em;
   <li><a href="#environment-dependent-configuration" id="toc-environment-dependent-configuration" class="nav-link" data-scroll-target="#environment-dependent-configuration"><span class="header-section-number">9.4</span> Environment-Dependent Configuration</a></li>
   </ul></li>
   <li><a href="#initialize-the-project" id="toc-initialize-the-project" class="nav-link" data-scroll-target="#initialize-the-project"><span class="header-section-number">10</span> Initialize the Project</a></li>
-  <li><a href="#best-practices" id="toc-best-practices" class="nav-link" data-scroll-target="#best-practices"><span class="header-section-number">11</span> Best Practices</a></li>
-  <li><a href="#summary-1" id="toc-summary-1" class="nav-link" data-scroll-target="#summary-1"><span class="header-section-number">12</span> Summary</a></li>
-  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps"><span class="header-section-number">13</span> Next Steps</a></li>
+  <li><a href="#creating-new-analysis-steps" id="toc-creating-new-analysis-steps" class="nav-link" data-scroll-target="#creating-new-analysis-steps"><span class="header-section-number">11</span> Creating New Analysis Steps</a>
+  <ul class="collapse">
+  <li><a href="#create-directory-structure" id="toc-create-directory-structure" class="nav-link" data-scroll-target="#create-directory-structure"><span class="header-section-number">11.1</span> 1. Create Directory Structure</a></li>
+  <li><a href="#create-one-sample-script" id="toc-create-one-sample-script" class="nav-link" data-scroll-target="#create-one-sample-script"><span class="header-section-number">11.2</span> 2. Create One-Sample Script</a></li>
+  <li><a href="#create-slurm-array-script" id="toc-create-slurm-array-script" class="nav-link" data-scroll-target="#create-slurm-array-script"><span class="header-section-number">11.3</span> 3. Create SLURM Array Script</a></li>
+  <li><a href="#test-locally" id="toc-test-locally" class="nav-link" data-scroll-target="#test-locally"><span class="header-section-number">11.4</span> 4. Test Locally</a></li>
+  <li><a href="#submit-to-hpc" id="toc-submit-to-hpc" class="nav-link" data-scroll-target="#submit-to-hpc"><span class="header-section-number">11.5</span> 5. Submit to HPC</a></li>
+  </ul></li>
+  <li><a href="#best-practices" id="toc-best-practices" class="nav-link" data-scroll-target="#best-practices"><span class="header-section-number">12</span> Best Practices</a></li>
+  <li><a href="#summary-1" id="toc-summary-1" class="nav-link" data-scroll-target="#summary-1"><span class="header-section-number">13</span> Summary</a></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps"><span class="header-section-number">14</span> Next Steps</a></li>
   </ul>
 </nav>
 </div>
@@ -2458,15 +2468,15 @@ vertical-align: -.125em;
 <li>Edit <code>config/config.yaml</code>: Adjust paths and parameters for your analysis type</li>
 <li>Create <code>config/config_local.yaml</code>: Add your machine-specific paths</li>
 <li>Update <code>docs/</code>: Rename QMD files and customize documentation</li>
-<li>Adapt scripts in <code>scripts/bash/</code>: Rename and modify for your specific analysis steps</li>
-<li>Create sample list: Generate <code>config/samples_list.txt</code> with your sample identifiers</li>
+<li>Adapt scripts in <code>scripts/&lt;step&gt;/</code>: Rename and modify for your specific analysis steps</li>
+<li>Create sample list: Generate <code>config/samples_names.txt</code> with your sample identifiers</li>
 </ul></li>
 <li><p><strong>Initialize project structure:</strong></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify parent path and analysis folder name</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/setup/init_project.sh <span class="at">-p</span> /path/to/parent <span class="at">-n</span> analysis_name</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/utils/init_project.sh <span class="at">-p</span> /path/to/parent <span class="at">-n</span> analysis_name</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: Create analysis folder &#39;run_20260112&#39; in your project area</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/setup/init_project.sh <span class="at">-p</span> /fstrat/username/my-project <span class="at">-n</span> run_20260112</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/utils/init_project.sh <span class="at">-p</span> /fstrat/username/my-project <span class="at">-n</span> run_20260112</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 </ol>
 </section>
 <section id="advantages-of-template-repository-vs-manual-cloning" class="level3" data-number="1.4.2">
@@ -2517,7 +2527,7 @@ vertical-align: -.125em;
 <li><p><strong>Set up SSH keys</strong> (see Section 4 for detailed instructions)</p></li>
 <li><p><strong>Initialize analysis folder</strong> (see detailed instructions in Section on Initialize the Project):</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create your analysis folder with appropriate name</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/setup/init_project.sh <span class="at">-p</span> /path/to/parent <span class="at">-n</span> analysis_folder</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/utils/init_project.sh <span class="at">-p</span> /path/to/parent <span class="at">-n</span> analysis_folder</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This will automatically create <code>config/config_local.yaml</code> with correct paths.</p></li>
 <li><p><strong>Start developing:</strong> Add your data paths, customize scripts, and begin analysis</p></li>
 </ol>
@@ -2784,12 +2794,19 @@ chmod 644 ~/.ssh/config</code></pre>
 │   └── config_local.yaml        # Local-only, ignored by Git
 │
 ├── scripts/
-│   ├── bash/                    # One-sample analysis scripts
-│   ├── slurm/                   # Job submission wrappers (HPC)
-│   ├── setup/
-│   │   └── init_project.sh      # Scaffolds folders and templates
-│   └── utils/
-│       └── load_config.sh       # Loads YAML configuration
+│   ├── utils/
+│   │   ├── init_project.sh      # Scaffolds folders and templates
+│   │   └── load_config.sh       # Loads YAML configuration
+│   ├── templates/               # Reusable script templates
+│   ├── 01_qc/                   # Quality control step
+│   │   ├── slurm_out/           # SLURM log files
+│   │   ├── 01_fastqc_one_sample.sh
+│   │   └── 01_fastqc_array.sbatch
+│   ├── 02_preprocessing/        # Preprocessing step
+│   │   ├── slurm_out/
+│   │   ├── 02_trim_one_sample.sh
+│   │   └── 02_trim_array.sbatch
+│   └── ...                      # Additional analysis steps
 │
 └── docs/
     └── bioinformatics_project_template.qmd  # Project documentation</code></pre>
@@ -2812,10 +2829,10 @@ chmod 644 ~/.ssh/config</code></pre>
 <p>This file contains <strong>only relative paths</strong> and <strong>pipeline parameters</strong>, never absolute paths.</p>
 <p>Generic example (adapt to your analysis type):</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">paths</span><span class="kw">:</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">raw_data</span><span class="kw">:</span><span class="at">       </span><span class="st">&quot;1_DATA/RAW&quot;</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">processed_data</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;1_DATA/PROCESSED&quot;</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">reference</span><span class="kw">:</span><span class="at">      </span><span class="st">&quot;1_DATA/REFERENCE&quot;</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">analyses</span><span class="kw">:</span><span class="at">       </span><span class="st">&quot;2_ANALYSES&quot;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">fastq_raw</span><span class="kw">:</span><span class="at">       </span><span class="st">&quot;1_DATA/FASTQ&quot;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">fastq_processed</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;2_ANALYSES/Results/02_preprocessing&quot;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">reference</span><span class="kw">:</span><span class="at">       </span><span class="st">&quot;1_DATA/REFERENCE&quot;</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">analyses</span><span class="kw">:</span><span class="at">        </span><span class="st">&quot;2_ANALYSES&quot;</span></span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cluster</span><span class="kw">:</span></span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">threads</span><span class="kw">:</span><span class="at"> </span><span class="dv">8</span></span>
@@ -2877,14 +2894,14 @@ chmod 644 ~/.ssh/config</code></pre>
 <span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="va">REPO_DIR</span><span class="op">=</span><span class="va">$(</span><span class="ex">yq</span> <span class="at">-r</span> <span class="st">&#39;.repo_dir&#39;</span> <span class="st">&quot;</span><span class="va">$LOCAL_CONFIG</span><span class="st">&quot;</span><span class="va">)</span></span>
 <span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Relative paths from config.yaml</span></span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="va">RAW_REL</span><span class="op">=</span><span class="va">$(</span><span class="ex">yq</span> <span class="at">-r</span> <span class="st">&#39;.paths.fastq_raw&#39;</span> <span class="st">&quot;</span><span class="va">$MAIN_CONFIG</span><span class="st">&quot;</span><span class="va">)</span></span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a><span class="va">CLEAN_REL</span><span class="op">=</span><span class="va">$(</span><span class="ex">yq</span> <span class="at">-r</span> <span class="st">&#39;.paths.fastq_clean&#39;</span> <span class="st">&quot;</span><span class="va">$MAIN_CONFIG</span><span class="st">&quot;</span><span class="va">)</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="va">FASTQ_RAW_REL</span><span class="op">=</span><span class="va">$(</span><span class="ex">yq</span> <span class="at">-r</span> <span class="st">&#39;.paths.fastq_raw&#39;</span> <span class="st">&quot;</span><span class="va">$MAIN_CONFIG</span><span class="st">&quot;</span><span class="va">)</span></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a><span class="va">FASTQ_PROC_REL</span><span class="op">=</span><span class="va">$(</span><span class="ex">yq</span> <span class="at">-r</span> <span class="st">&#39;.paths.fastq_processed&#39;</span> <span class="st">&quot;</span><span class="va">$MAIN_CONFIG</span><span class="st">&quot;</span><span class="va">)</span></span>
 <span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a><span class="va">REF_REL</span><span class="op">=</span><span class="va">$(</span><span class="ex">yq</span> <span class="at">-r</span> <span class="st">&#39;.paths.reference&#39;</span> <span class="st">&quot;</span><span class="va">$MAIN_CONFIG</span><span class="st">&quot;</span><span class="va">)</span></span>
 <span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a><span class="va">ANALYSES_REL</span><span class="op">=</span><span class="va">$(</span><span class="ex">yq</span> <span class="at">-r</span> <span class="st">&#39;.paths.analyses&#39;</span> <span class="st">&quot;</span><span class="va">$MAIN_CONFIG</span><span class="st">&quot;</span><span class="va">)</span></span>
 <span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Build absolute paths</span></span>
-<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a><span class="va">FASTQ_RAW_DIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$BASE_DIR</span><span class="st">/</span><span class="va">$RAW_REL</span><span class="st">&quot;</span></span>
-<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a><span class="va">FASTQ_CLEAN_DIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$BASE_DIR</span><span class="st">/</span><span class="va">$CLEAN_REL</span><span class="st">&quot;</span></span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a><span class="va">FASTQ_RAW_DIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$BASE_DIR</span><span class="st">/</span><span class="va">$FASTQ_RAW_REL</span><span class="st">&quot;</span></span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a><span class="va">FASTQ_PROC_DIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$BASE_DIR</span><span class="st">/</span><span class="va">$FASTQ_PROC_REL</span><span class="st">&quot;</span></span>
 <span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a><span class="va">REFERENCE_DIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$BASE_DIR</span><span class="st">/</span><span class="va">$REF_REL</span><span class="st">&quot;</span></span>
 <span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a><span class="va">ANALYSES_DIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$BASE_DIR</span><span class="st">/</span><span class="va">$ANALYSES_REL</span><span class="st">&quot;</span></span>
 <span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a></span>
@@ -2901,30 +2918,25 @@ chmod 644 ~/.ssh/config</code></pre>
 <pre><code>my-analysis/
 │
 ├── 1_DATA/
-│   ├── RAW/                  # Original input files (read-only)
-│   │   ├── sequences/        # FASTQ, BAM, VCF, or other input formats
-│   │   └── metadata/
+│   ├── FASTQ/                # Original FASTQ files (read-only)
+│   │   ├── sample_1_R1.fastq.gz
+│   │   ├── sample_1_R2.fastq.gz
+│   │   ├── sample_2_R1.fastq.gz
+│   │   └── sample_2_R2.fastq.gz
 │   │
 │   ├── REFERENCE/            # Reference data and indices
 │   │   ├── GENOME/           # Reference sequences (FASTA)
 │   │   ├── ANNOTATION/       # Gene annotations (GTF/GFF3/BED)
 │   │   └── INDEXES/          # Pre-built indices (tool-specific)
-│   │
-│   └── PROCESSED/            # Stable derived data (if needed)
-│       └── cleaned/
 │
 ├── 2_ANALYSES/
 │   ├── Scripts/              # symlink to repository scripts
 │   └── Results/
-│       ├── 01_qc/            # Quality control outputs
-│       ├── 02_preprocessing/ # Trimming, filtering, etc.
-│       ├── 03_main_analysis/ # Primary analysis step
+│       ├── 01_qc/            # Quality control outputs (FastQC, etc.)
+│       ├── 02_preprocessing/ # Processed FASTQ, trimming outputs
+│       ├── 03_main_analysis/ # Alignment, quantification, etc.
 │       ├── 04_tables/        # Results tables
-│       └── 05_figures/        # Plots and visualizations
-│
-├── 3_FIGURES/
-├── 4_TABLES/
-└── 5_PUBLICATION/</code></pre>
+│       └── 05_figures/       # Plots and visualizations</code></pre>
 <p>Note: prefer creating these folders incrementally as bioinformatics analysis steps are executed and needed. There is no need to pre-create the entire structure; scripts can create required paths on demand (for example, <code>init_project.sh</code> and analysis scripts create <code>2_ANALYSES/Results/&lt;step&gt;</code> when appropriate). This approach avoids empty directories, reduces organizational errors, and improves traceability.</p>
 <section id="key-principles-2" class="level2" data-number="7.1">
 <h2 data-number="7.1" class="anchored" data-anchor-id="key-principles-2"><span class="header-section-number">7.1</span> Key Principles</h2>
@@ -2940,108 +2952,132 @@ chmod 644 ~/.ssh/config</code></pre>
 <h1 data-number="8"><span class="header-section-number">8</span> Script Architecture</h1>
 <section id="one-sample-bash-scripts" class="level2" data-number="8.1">
 <h2 data-number="8.1" class="anchored" data-anchor-id="one-sample-bash-scripts"><span class="header-section-number">8.1</span> One-Sample Bash Scripts</h2>
-<p>Path: <code>scripts/bash/01_analysis_one_sample.sh</code></p>
-<p>Example for a generic analysis step:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="va">SAMPLE_ID</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$1</span><span class="st">&quot;</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="va">SCRIPT_DIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$(</span><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">dirname</span> <span class="st">&quot;</span><span class="va">${BASH_SOURCE</span><span class="op">[</span><span class="dv">0</span><span class="op">]</span><span class="va">}</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span> <span class="kw">&amp;&amp;</span> <span class="bu">pwd</span><span class="va">)</span><span class="st">&quot;</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="va">REPO_ROOT</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$SCRIPT_DIR</span><span class="st">/../..&quot;</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$REPO_ROOT</span><span class="st">&quot;</span> <span class="kw">||</span> <span class="bu">exit</span> 1</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> scripts/utils/load_config.sh</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Define output directory for this step</span></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="va">OUTDIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$ANALYSES_DIR</span><span class="st">/03_main_analysis&quot;</span></span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">&quot;</span><span class="va">$OUTDIR</span><span class="st">&quot;</span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Load tool (if using module system)</span></span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">command</span> <span class="at">-v</span> module <span class="op">&amp;&gt;</span> /dev/null<span class="kw">;</span> <span class="cf">then</span></span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    <span class="ex">module</span> load my-analysis-tool  <span class="co"># Replace with your actual tool</span></span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span></span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">&quot;my-analysis-tool: no module system in this environment&quot;</span></span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Run analysis on one sample</span></span>
-<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a><span class="ex">my-analysis-tool</span> <span class="at">--input</span> <span class="st">&quot;</span><span class="va">$RAW_DIR</span><span class="st">/</span><span class="va">${SAMPLE_ID}</span><span class="st">.data&quot;</span> <span class="dt">\</span></span>
-<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>                 <span class="at">--output</span> <span class="st">&quot;</span><span class="va">$OUTDIR</span><span class="st">/</span><span class="va">${SAMPLE_ID}</span><span class="st">.results&quot;</span> <span class="dt">\</span></span>
-<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>                 <span class="at">--threads</span> <span class="st">&quot;</span><span class="va">$THREADS</span><span class="st">&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This script architecture: * Processes <strong>one sample</strong> only. * Is independent of SLURM (runs locally or in HPC). * Can be tested on macOS, then scaled via SLURM arrays. * Uses configuration via <code>load_config.sh</code>. * Can be adapted to any bioinformatics tool or workflow step.</p>
-</section>
-<section id="sample-list-file" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="sample-list-file"><span class="header-section-number">8.2</span> Sample List File</h2>
-<p>Generate a file listing sample identifiers (or other items to analyze) from your data.</p>
-<p><strong>Script location:</strong> <code>scripts/utils/extract_samples_from_input.sh</code></p>
-<section id="what-it-does" class="level3" data-number="8.2.1">
-<h3 data-number="8.2.1" class="anchored" data-anchor-id="what-it-does"><span class="header-section-number">8.2.1</span> What it does</h3>
+<p>Path: <code>scripts/&lt;step&gt;/&lt;step&gt;_one_sample.sh</code> (e.g., <code>scripts/01_qc/01_fastqc_one_sample.sh</code>)</p>
+<p>Each script processes a <strong>single sample</strong> and is independent of SLURM. This enables:</p>
 <ul>
-<li>Extracts unique sample/item identifiers from input files.</li>
-<li>Handles flexible input formats (directory listing, metadata file, etc.).</li>
-<li>Auto-deduplicates and sorts.</li>
-<li>Outputs to <code>config/samples_list.txt</code>.</li>
+<li><strong>Local testing</strong>: Test on macOS before cluster submission</li>
+<li><strong>Reusability</strong>: Same script runs locally or in HPC arrays</li>
+<li><strong>Debugging</strong>: Easy to troubleshoot single-sample issues</li>
+</ul>
+<section id="usage" class="level3" data-number="8.1.1">
+<h3 data-number="8.1.1" class="anchored" data-anchor-id="usage"><span class="header-section-number">8.1.1</span> Usage</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test locally</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/01_qc/01_fastqc_one_sample.sh sample_1</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This reads from: 1_DATA/FASTQ/sample_1*.fastq.gz</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># And writes to:  2_ANALYSES/Results/01_qc/</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="example-implementation" class="level3" data-number="8.1.2">
+<h3 data-number="8.1.2" class="anchored" data-anchor-id="example-implementation"><span class="header-section-number">8.1.2</span> Example Implementation</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="va">SAMPLE_ID</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$1</span><span class="st">&quot;</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="va">SCRIPT_DIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$(</span><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">dirname</span> <span class="st">&quot;</span><span class="va">${BASH_SOURCE</span><span class="op">[</span><span class="dv">0</span><span class="op">]</span><span class="va">}</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span> <span class="kw">&amp;&amp;</span> <span class="bu">pwd</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="va">REPO_ROOT</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$SCRIPT_DIR</span><span class="st">/../..&quot;</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$REPO_ROOT</span><span class="st">&quot;</span> <span class="kw">||</span> <span class="bu">exit</span> 1</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> scripts/utils/load_config.sh</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create output directory</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="va">OUTDIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$ANALYSES_DIR</span><span class="st">/Results/01_qc&quot;</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">&quot;</span><span class="va">$OUTDIR</span><span class="st">&quot;</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Load module if available</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">command</span> <span class="at">-v</span> module <span class="op">&amp;&gt;</span> /dev/null<span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>    <span class="ex">module</span> load fastqc</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Run analysis</span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a><span class="ex">fastqc</span> <span class="at">-t</span> <span class="st">&quot;</span><span class="va">$THREADS</span><span class="st">&quot;</span> <span class="at">-o</span> <span class="st">&quot;</span><span class="va">$OUTDIR</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">$FASTQ_RAW_DIR</span><span class="st">/</span><span class="va">${SAMPLE_ID}</span><span class="st">&quot;</span><span class="pp">*</span>.fastq.gz</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;FastQC completed for </span><span class="va">$SAMPLE_ID</span><span class="st">&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="sample-list-format" class="level3" data-number="8.1.3">
+<h3 data-number="8.1.3" class="anchored" data-anchor-id="sample-list-format"><span class="header-section-number">8.1.3</span> Sample List Format</h3>
+<p>Create <code>config/samples_names.txt</code> with one sample ID per line:</p>
+<pre><code>sample_1
+sample_2
+sample_3</code></pre>
+<p>Array jobs use this file to determine: - Number of tasks: <code>--array=1-N</code> where N = line count - Sample assignment: Each task gets one line based on <code>SLURM_ARRAY_TASK_ID</code></p>
+<hr>
+</section>
+</section>
+<section id="slurm-array-jobs" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="slurm-array-jobs"><span class="header-section-number">8.2</span> SLURM Array Jobs</h2>
+<p>Path: <code>scripts/&lt;step&gt;/&lt;step&gt;_array.sbatch</code> (e.g., <code>scripts/01_qc/01_fastqc_array.sbatch</code>)</p>
+<p>Array jobs run <strong>one-sample scripts in parallel</strong> on HPC clusters. The structure is simple:</p>
+<pre><code>scripts/&lt;step&gt;/
+├── slurm_out/                # Log files only
+├── &lt;step&gt;_one_sample.sh      # Bash script - process one sample
+└── &lt;step&gt;_array.sbatch       # SLURM script - submit array job</code></pre>
+<section id="quick-start" class="level3" data-number="8.2.1">
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="quick-start"><span class="header-section-number">8.2.1</span> Quick Start</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Submit all samples as parallel tasks (from repository root)</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /path/to/repository</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> scripts/01_qc/01_fastqc_array.sbatch</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Monitor</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-j</span> <span class="op">&lt;</span>job_id<span class="op">&gt;</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-f</span> scripts/01_qc/slurm_out/fastqc_array_<span class="op">&lt;</span>job_id<span class="op">&gt;</span>_1.out</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="how-it-works" class="level3" data-number="8.2.2">
+<h3 data-number="8.2.2" class="anchored" data-anchor-id="how-it-works"><span class="header-section-number">8.2.2</span> How It Works</h3>
+<p>The array job: 1. Reads sample names from <code>config/samples_names.txt</code> 2. Creates N parallel SLURM tasks (N = sample count) 3. Each task calls: <code>bash 01_fastqc_one_sample.sh &lt;SAMPLE_ID&gt;</code> 4. Results are combined in <code>2_ANALYSES/Results/01_qc/</code></p>
+</section>
+<section id="example-slurm-script" class="level3" data-number="8.2.3">
+<h3 data-number="8.2.3" class="anchored" data-anchor-id="example-slurm-script"><span class="header-section-number">8.2.3</span> Example SLURM Script</h3>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -J fastqc_array</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -o scripts/01_qc/slurm_out/%x_%A_%a.out</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -e scripts/01_qc/slurm_out/%x_%A_%a.err</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -c 8</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=16G</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH -t 3-00:00:00</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --constraint=cal</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --array=1-N      # N = number of samples</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="va">SCRIPT_DIR</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$(</span><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$(</span><span class="fu">dirname</span> <span class="st">&quot;</span><span class="va">${BASH_SOURCE</span><span class="op">[</span><span class="dv">0</span><span class="op">]</span><span class="va">}</span><span class="st">&quot;</span><span class="va">)</span><span class="st">&quot;</span> <span class="kw">&amp;&amp;</span> <span class="bu">pwd</span><span class="va">)</span><span class="st">&quot;</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="va">REPO_ROOT</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$SCRIPT_DIR</span><span class="st">/../..&quot;</span></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$REPO_ROOT</span><span class="st">&quot;</span> <span class="kw">||</span> <span class="bu">exit</span> 1</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> scripts/utils/load_config.sh</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a><span class="va">SAMPLES_FILE</span><span class="op">=</span><span class="st">&quot;config/samples_names.txt&quot;</span></span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a><span class="ex">mapfile</span> <span class="at">-t</span> SAMPLES <span class="op">&lt;</span> <span class="st">&quot;</span><span class="va">$SAMPLES_FILE</span><span class="st">&quot;</span></span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a><span class="va">TASK_ID</span><span class="op">=</span><span class="va">$((SLURM_ARRAY_TASK_ID</span> <span class="op">-</span> <span class="dv">1</span><span class="va">))</span></span>
+<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a><span class="va">SAMPLE_ID</span><span class="op">=</span><span class="st">&quot;</span><span class="va">${SAMPLES</span><span class="op">[</span><span class="va">$TASK_ID</span><span class="op">]</span><span class="va">}</span><span class="st">&quot;</span></span>
+<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-22"><a href="#cb30-22" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Processing sample: </span><span class="va">$SAMPLE_ID</span><span class="st"> (task </span><span class="va">${SLURM_ARRAY_TASK_ID}</span><span class="st">)&quot;</span></span>
+<span id="cb30-23"><a href="#cb30-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-24"><a href="#cb30-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Call one-sample script</span></span>
+<span id="cb30-25"><a href="#cb30-25" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/01_qc/01_fastqc_one_sample.sh <span class="st">&quot;</span><span class="va">$SAMPLE_ID</span><span class="st">&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="key-features" class="level3" data-number="8.2.4">
+<h3 data-number="8.2.4" class="anchored" data-anchor-id="key-features"><span class="header-section-number">8.2.4</span> Key Features</h3>
+<ul>
+<li><strong>One sample per task</strong>: <code>SLURM_ARRAY_TASK_ID</code> indexes into sample list</li>
+<li><strong>Parallel execution</strong>: All samples run simultaneously on HPC</li>
+<li><strong>Simple submission</strong>: <code>sbatch scripts/01_qc/01_fastqc_array.sbatch</code></li>
+<li><strong>Reusability</strong>: Same one-sample script for local testing and HPC</li>
+<li><strong>Log separation</strong>: Each task has its own log file in <code>slurm_out/</code></li>
 </ul>
 </section>
-<section id="usage" class="level3" data-number="8.2.2">
-<h3 data-number="8.2.2" class="anchored" data-anchor-id="usage"><span class="header-section-number">8.2.2</span> Usage</h3>
-<p><strong>Auto-detect input files:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/utils/extract_samples_from_input.sh</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p><strong>Provide input explicitly:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/utils/extract_samples_from_input.sh /path/to/metadata.csv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section>
-<section id="output" class="level3" data-number="8.2.3">
-<h3 data-number="8.2.3" class="anchored" data-anchor-id="output"><span class="header-section-number">8.2.3</span> Output</h3>
-<p><code>config/samples_list.txt</code>:</p>
-<pre><code>SAMPLE_001
-SAMPLE_002
-SAMPLE_003
-SAMPLE_004
-SAMPLE_005</code></pre>
-<p>Each line corresponds to one array task index and can represent any item to analyze (sample, individual, region, etc.).</p>
-</section>
-</section>
-<section id="slurm-array-jobs" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="slurm-array-jobs"><span class="header-section-number">8.3</span> SLURM Array Jobs</h2>
-<p>Path: <code>scripts/slurm/01_analysis_array.sbatch</code></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=analysis_array</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=%x_%A_%a.out</span></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --error=%x_%A_%a.err</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=4</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=8G</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=02:00:00</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --partition=short</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --array=1-N      # Adjust N to match number of items in samples_list.txt</span></span>
-<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a><span class="va">REPO_ROOT</span><span class="op">=</span><span class="st">&quot;</span><span class="va">$HOME</span><span class="st">/Repositories/my-analysis-repo&quot;</span></span>
-<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> <span class="st">&quot;</span><span class="va">$REPO_ROOT</span><span class="st">&quot;</span> <span class="kw">||</span> <span class="bu">exit</span> 1</span>
-<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> scripts/utils/load_config.sh</span>
-<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a><span class="va">SAMPLES_FILE</span><span class="op">=</span><span class="st">&quot;config/samples_list.txt&quot;</span></span>
-<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a><span class="va">ITEM_ID</span><span class="op">=</span><span class="va">$(</span><span class="fu">sed</span> <span class="at">-n</span> <span class="st">&quot;</span><span class="va">${SLURM_ARRAY_TASK_ID}</span><span class="st">p&quot;</span> <span class="st">&quot;</span><span class="va">$SAMPLES_FILE</span><span class="st">&quot;</span><span class="va">)</span></span>
-<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Processing item: </span><span class="va">$ITEM_ID</span><span class="st"> (array task </span><span class="va">${SLURM_ARRAY_TASK_ID}</span><span class="st">)&quot;</span></span>
-<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Call your one-sample script</span></span>
-<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/bash/01_analysis_one_sample.sh <span class="st">&quot;</span><span class="va">$ITEM_ID</span><span class="st">&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<section id="how-it-works" class="level3" data-number="8.3.1">
-<h3 data-number="8.3.1" class="anchored" data-anchor-id="how-it-works"><span class="header-section-number">8.3.1</span> How it works</h3>
+<section id="important-log-directory-requirements" class="level3" data-number="8.2.5">
+<h3 data-number="8.2.5" class="anchored" data-anchor-id="important-log-directory-requirements"><span class="header-section-number">8.2.5</span> Important: Log Directory Requirements</h3>
+<p><strong>⚠️ Critical:</strong> SLURM requires the log directory to exist <strong>before</strong> job submission.</p>
 <ul>
-<li><code>SLURM_ARRAY_TASK_ID</code> provides task index (starting from 1 by default).</li>
-<li><code>sed</code> extracts corresponding line from samples list.</li>
-<li>Each task launches the Bash script on a different item.</li>
-<li>Submit: <code>sbatch scripts/slurm/01_analysis_array.sbatch</code></li>
+<li>The repository includes <code>.gitkeep</code> files in each <code>slurm_out/</code> directory</li>
+<li>This ensures <code>slurm_out/</code> exists when you clone the repository</li>
+<li>SLURM <strong>cannot create</strong> the log directory automatically</li>
+<li>If the directory doesn’t exist, job submission will <strong>fail</strong></li>
 </ul>
-</section>
-<section id="benefits" class="level3" data-number="8.3.2">
-<h3 data-number="8.3.2" class="anchored" data-anchor-id="benefits"><span class="header-section-number">8.3.2</span> Benefits</h3>
-<ul>
-<li><strong>Reusability</strong>: Bash scripts tested locally, reused on HPC.</li>
-<li><strong>Scalability</strong>: SLURM arrays distribute samples efficiently.</li>
-<li><strong>Clean architecture</strong>: No duplication of logic.</li>
-<li><strong>Flexibility</strong>: Changing sample lists doesn’t require editing scripts.</li>
-</ul>
+<p><strong>Why .gitkeep?</strong> Git doesn’t track empty directories. The <code>.gitkeep</code> file forces Git to include the <code>slurm_out/</code> directory in the repository, ensuring it exists for all users.</p>
+<p><strong>For new analysis steps:</strong> When creating a new step (e.g., <code>scripts/02_preprocessing/</code>), always:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> scripts/02_preprocessing/slurm_out</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> scripts/02_preprocessing/slurm_out/.gitkeep</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add scripts/02_preprocessing/slurm_out/.gitkeep</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <hr>
 </section>
 </section>
@@ -3068,35 +3104,35 @@ SAMPLE_005</code></pre>
     ├── Scripts/   # symlink to repository scripts
     └── Results/   # all outputs generated here</code></pre>
 <p>Create symlink:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> <span class="st">&quot;</span><span class="va">$REPO_DIR</span><span class="st">/scripts&quot;</span> <span class="st">&quot;</span><span class="va">$BASE_DIR</span><span class="st">/2_ANALYSES/Scripts/scripts_repo&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ln</span> <span class="at">-s</span> <span class="st">&quot;</span><span class="va">$REPO_DIR</span><span class="st">/scripts&quot;</span> <span class="st">&quot;</span><span class="va">$BASE_DIR</span><span class="st">/2_ANALYSES/Scripts/scripts_repo&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This ensures traceability without duplicating code.</p>
 </section>
 <section id="synchronizing-results-from-fstrat-to-nas" class="level2" data-number="9.3">
 <h2 data-number="9.3" class="anchored" data-anchor-id="synchronizing-results-from-fstrat-to-nas"><span class="header-section-number">9.3</span> Synchronizing Results from fstrat to NAS</h2>
 <p>After execution:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-av</span> /fstrat/.../2_ANALYSES/ /NAS/my-analysis/2_ANALYSES/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-av</span> /fstrat/.../2_ANALYSES/ /NAS/my-analysis/2_ANALYSES/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This pattern allows: * Fast execution on cluster. * Durable storage on NAS. * Clean reproducibility.</p>
 </section>
 <section id="environment-dependent-configuration" class="level2" data-number="9.4">
 <h2 data-number="9.4" class="anchored" data-anchor-id="environment-dependent-configuration"><span class="header-section-number">9.4</span> Environment-Dependent Configuration</h2>
 <p>Only two variables change across machines:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">base_dir</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;path/to/data_and_results&quot;</span><span class="co">   # fstrat, NAS, or local path</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">repo_dir</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;path/to/repository&quot;</span><span class="co">         # HOME on cluster, local path on macOS</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">base_dir</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;path/to/data_and_results&quot;</span><span class="co">   # fstrat, NAS, or local path</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">repo_dir</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;path/to/repository&quot;</span><span class="co">         # HOME on cluster, local path on macOS</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>All scripts use these paths indirectly through <code>load_config.sh</code>.</p>
 <hr>
 </section>
 </section>
 <section id="initialize-the-project" class="level1" data-number="10">
 <h1 data-number="10"><span class="header-section-number">10</span> Initialize the Project</h1>
-<p>Use <code>scripts/setup/init_project.sh</code> to create folders and templates:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># View help and options</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/setup/init_project.sh <span class="at">--help</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize project with specified parent path and folder name</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/setup/init_project.sh <span class="at">-p</span> <span class="op">&lt;</span>parent-path<span class="op">&gt;</span> -n <span class="op">&lt;</span>folder-name<span class="op">&gt;</span></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: Create analysis folder &#39;run_20260112&#39; in &#39;/fstrat/dmartin/sparrow-analysis&#39;</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/setup/init_project.sh <span class="at">-p</span> /fstrat/dmartin/sparrow-analysis <span class="at">-n</span> run_20260112</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Use <code>scripts/utils/init_project.sh</code> to create folders and templates:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># View help and options</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/utils/init_project.sh <span class="at">--help</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize project with specified parent path and folder name</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/utils/init_project.sh <span class="at">-p</span> <span class="op">&lt;</span>parent-path<span class="op">&gt;</span> -n <span class="op">&lt;</span>folder-name<span class="op">&gt;</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: Create analysis folder &#39;run_20260112&#39; in &#39;/fstrat/dmartin/sparrow-analysis&#39;</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/utils/init_project.sh <span class="at">-p</span> /fstrat/dmartin/sparrow-analysis <span class="at">-n</span> run_20260112</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Required Arguments:</strong></p>
 <ul>
 <li><code>-p, --parent-path PATH</code>: Parent directory where the analysis folder will be created</li>
@@ -3118,8 +3154,8 @@ SAMPLE_005</code></pre>
 </ul></li>
 <li><p>Creates script templates in <code>scripts/templates/</code>:</p>
 <ul>
-<li><code>job_slurm_template.sh</code> → SLURM job template</li>
-<li><code>analysis_script_template.sh</code> → Generic analysis script</li>
+<li><code>array_job_template.sbatch</code> → SLURM array job template</li>
+<li><code>analysis_script_template.sh</code> → Generic one-sample script template</li>
 </ul></li>
 </ol>
 <p><strong>Structure Philosophy:</strong></p>
@@ -3132,8 +3168,43 @@ SAMPLE_005</code></pre>
 </ul>
 <hr>
 </section>
-<section id="best-practices" class="level1" data-number="11">
-<h1 data-number="11"><span class="header-section-number">11</span> Best Practices</h1>
+<section id="creating-new-analysis-steps" class="level1" data-number="11">
+<h1 data-number="11"><span class="header-section-number">11</span> Creating New Analysis Steps</h1>
+<p>To add a new analysis step (e.g., <code>02_preprocessing</code>):</p>
+<section id="create-directory-structure" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="create-directory-structure"><span class="header-section-number">11.1</span> 1. Create Directory Structure</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> scripts/02_preprocessing/slurm_out</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> scripts/02_preprocessing/slurm_out/.gitkeep</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add scripts/02_preprocessing/slurm_out/.gitkeep</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Note:</strong> The <code>.gitkeep</code> file is <strong>required</strong> so Git tracks the <code>slurm_out/</code> directory. SLURM needs this directory to exist before job submission.</p>
+</section>
+<section id="create-one-sample-script" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="create-one-sample-script"><span class="header-section-number">11.2</span> 2. Create One-Sample Script</h2>
+<p>Copy and adapt the template:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> scripts/templates/analysis_script_template.sh scripts/02_preprocessing/02_trim_one_sample.sh</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Edit the script to: - Process your specific analysis (trimming, alignment, etc.) - Use appropriate input/output paths from <code>load_config.sh</code> - Load required modules or tools</p>
+</section>
+<section id="create-slurm-array-script" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="create-slurm-array-script"><span class="header-section-number">11.3</span> 3. Create SLURM Array Script</h2>
+<p>Copy and adapt the template:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> scripts/templates/array_job_template.sbatch scripts/02_preprocessing/02_trim_array.sbatch</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Update: - Job name: <code>#SBATCH -J trim_array</code> - Array size: <code>#SBATCH --array=1-N</code> (N = sample count) - Script call: <code>bash scripts/02_preprocessing/02_trim_one_sample.sh &quot;$SAMPLE_ID&quot;</code></p>
+</section>
+<section id="test-locally" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="test-locally"><span class="header-section-number">11.4</span> 4. Test Locally</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/02_preprocessing/02_trim_one_sample.sh sample_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="submit-to-hpc" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="submit-to-hpc"><span class="header-section-number">11.5</span> 5. Submit to HPC</h2>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Execute from repository root</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /path/to/repository</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> scripts/02_preprocessing/02_trim_array.sbatch</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Important:</strong> Always execute <code>sbatch</code> from the repository root directory. Log paths in SLURM directives (<code>#SBATCH -o</code> and <code>-e</code>) are relative to the repository root.</p>
+<hr>
+</section>
+</section>
+<section id="best-practices" class="level1" data-number="12">
+<h1 data-number="12"><span class="header-section-number">12</span> Best Practices</h1>
 <ul>
 <li>Always <code>source scripts/utils/load_config.sh</code> at the start of analysis scripts.</li>
 <li>Never modify <code>1_DATA/</code> during analyses; write outputs to <code>2_ANALYSES/</code>.</li>
@@ -3145,8 +3216,8 @@ SAMPLE_005</code></pre>
 </ul>
 <hr>
 </section>
-<section id="summary-1" class="level1" data-number="12">
-<h1 data-number="12"><span class="header-section-number">12</span> Summary</h1>
+<section id="summary-1" class="level1" data-number="13">
+<h1 data-number="13"><span class="header-section-number">13</span> Summary</h1>
 <ul>
 <li><code>config.yaml</code> → shared, versioned, general settings.</li>
 <li><code>config_local.yaml</code> → local, private, machine-specific.</li>
@@ -3159,8 +3230,8 @@ SAMPLE_005</code></pre>
 </ul>
 <hr>
 </section>
-<section id="next-steps" class="level1" data-number="13">
-<h1 data-number="13"><span class="header-section-number">13</span> Next Steps</h1>
+<section id="next-steps" class="level1" data-number="14">
+<h1 data-number="14"><span class="header-section-number">14</span> Next Steps</h1>
 <p>Before you start:</p>
 <ul>
 <li><p><strong>Configure SSH keys</strong> for secure, password-free access to GitHub, cluster, and NAS (see Section 4).</p></li>

@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #SBATCH -J array_job_template
-#SBATCH -o scripts/<step>/slurm_out/%x_%A_%a.out
-#SBATCH -e scripts/<step>/slurm_out/%x_%A_%a.err
+#SBATCH -o .slurm_out/%x_%A_%a.out
+#SBATCH -e .slurm_out/%x_%A_%a.err
 #SBATCH -c 8
 #SBATCH --mem=16G
 #SBATCH -t 3-00:00:00

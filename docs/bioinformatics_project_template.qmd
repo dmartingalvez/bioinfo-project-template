@@ -383,25 +383,33 @@ bioinfo-project-repo/
 │
 ├── config/
 │   ├── config.yaml              # Shared, versioned, portable paths
-│   └── config_local.yaml        # Local-only, ignored by Git
+│   ├── config_local.yaml        # Local-only, ignored by Git
+│   └── samples_names.txt         # Sample identifiers list
 │
 ├── scripts/
-│   ├── utils/
-│   │   ├── init_project.sh      # Scaffolds folders and templates
-│   │   └── load_config.sh       # Loads YAML configuration
-│   ├── templates/               # Reusable script templates
-│   ├── 01_qc/                   # Quality control step
+│   ├── 01_qc/                   # Quality control analysis scripts
 │   │   ├── slurm_out/           # SLURM log files
 │   │   ├── 01_fastqc_one_sample.sh
-│   │   └── 01_fastqc_array.sbatch
-│   ├── 02_preprocessing/        # Preprocessing step
-│   │   ├── slurm_out/
-│   │   ├── 02_trim_one_sample.sh
-│   │   └── 02_trim_array.sbatch
-│   └── ...                      # Additional analysis steps
+│   │   ├── 01_fastqc_array.sbatch
+│   │   └── README.md
+│   ├── templates/               # Reusable script templates
+│   │   ├── analysis_script_template.sh
+│   │   ├── array_job_template.sbatch
+│   │   ├── job_slurm_template.sh
+│   │   └── slurm_out/
+│   └── utils/
+│       ├── init_project.sh      # Scaffolds folders and templates
+│       ├── load_config.sh       # Loads YAML configuration
+│       └── test_load_config.sh
 │
-└── docs/
-    └── bioinformatics_project_template.qmd  # Project documentation
+├── docs/
+│   ├── bioinformatics_project_template.qmd  # Project documentation
+│   ├── bioinformatics_project_template.html
+│   └── index.html
+│
+├── logs/                        # Job logs and outputs
+│
+└── README.md
 ```
 
 ## Key Principles
@@ -832,7 +840,7 @@ bash scripts/utils/init_project.sh -p /fstrat/dmartin/sparrow-analysis -n run_20
 
 To add a new analysis step (e.g., `02_preprocessing`):
 
-## 1. Create Directory Structure
+## Create Directory Structure
 
 ```bash
 mkdir -p scripts/02_preprocessing/slurm_out
@@ -842,7 +850,7 @@ git add scripts/02_preprocessing/slurm_out/.gitkeep
 
 **Note:** The `.gitkeep` file is **required** so Git tracks the `slurm_out/` directory. SLURM needs this directory to exist before job submission.
 
-## 2. Create One-Sample Script
+## Create One-Sample Script
 
 Copy and adapt the template:
 
@@ -855,7 +863,7 @@ Edit the script to:
 - Use appropriate input/output paths from `load_config.sh`
 - Load required modules or tools
 
-## 3. Create SLURM Array Script
+## Create SLURM Array Script
 
 Copy and adapt the template:
 
@@ -868,13 +876,13 @@ Update:
 - Array size: `#SBATCH --array=1-N` (N = sample count)
 - Script call: `bash scripts/02_preprocessing/02_trim_one_sample.sh "$SAMPLE_ID"`
 
-## 4. Test Locally
+## Test Locally
 
 ```bash
 bash scripts/02_preprocessing/02_trim_one_sample.sh sample_1
 ```
 
-## 5. Submit to HPC
+## Submit to HPC
 
 ```bash
 # Execute from repository root

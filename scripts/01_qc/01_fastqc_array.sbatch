@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #SBATCH -J fastqc_array
-#SBATCH -o scripts/01_qc/slurm_out/%x_%A_%a.out
-#SBATCH -e scripts/01_qc/slurm_out/%x_%A_%a.err
+#SBATCH -o ./slurm_out/%x_%A_%a.out
+#SBATCH -e ./slurm_out/%x_%A_%a.err
 #SBATCH -c 8
 #SBATCH --mem=16G
 #SBATCH -t 3-00:00:00
@@ -68,7 +68,7 @@ echo "Base Dir:      $BASE_DIR"
 echo "=========================================="
 
 # Run FastQC for this sample
-bash scripts/bash/01_fastqc_one_sample.sh "$SAMPLE_ID"
+bash scripts/01_qc/01_fastqc_one_sample.sh "$SAMPLE_ID"
 
 echo "=========================================="
 echo "FastQC completed for sample: $SAMPLE_ID"

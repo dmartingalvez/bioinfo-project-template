@@ -2299,11 +2299,11 @@ vertical-align: -.125em;
   <li><a href="#initialize-the-project" id="toc-initialize-the-project" class="nav-link" data-scroll-target="#initialize-the-project"><span class="header-section-number">10</span> Initialize the Project</a></li>
   <li><a href="#creating-new-analysis-steps" id="toc-creating-new-analysis-steps" class="nav-link" data-scroll-target="#creating-new-analysis-steps"><span class="header-section-number">11</span> Creating New Analysis Steps</a>
   <ul class="collapse">
-  <li><a href="#create-directory-structure" id="toc-create-directory-structure" class="nav-link" data-scroll-target="#create-directory-structure"><span class="header-section-number">11.1</span> 1. Create Directory Structure</a></li>
-  <li><a href="#create-one-sample-script" id="toc-create-one-sample-script" class="nav-link" data-scroll-target="#create-one-sample-script"><span class="header-section-number">11.2</span> 2. Create One-Sample Script</a></li>
-  <li><a href="#create-slurm-array-script" id="toc-create-slurm-array-script" class="nav-link" data-scroll-target="#create-slurm-array-script"><span class="header-section-number">11.3</span> 3. Create SLURM Array Script</a></li>
-  <li><a href="#test-locally" id="toc-test-locally" class="nav-link" data-scroll-target="#test-locally"><span class="header-section-number">11.4</span> 4. Test Locally</a></li>
-  <li><a href="#submit-to-hpc" id="toc-submit-to-hpc" class="nav-link" data-scroll-target="#submit-to-hpc"><span class="header-section-number">11.5</span> 5. Submit to HPC</a></li>
+  <li><a href="#create-directory-structure" id="toc-create-directory-structure" class="nav-link" data-scroll-target="#create-directory-structure"><span class="header-section-number">11.1</span> Create Directory Structure</a></li>
+  <li><a href="#create-one-sample-script" id="toc-create-one-sample-script" class="nav-link" data-scroll-target="#create-one-sample-script"><span class="header-section-number">11.2</span> Create One-Sample Script</a></li>
+  <li><a href="#create-slurm-array-script" id="toc-create-slurm-array-script" class="nav-link" data-scroll-target="#create-slurm-array-script"><span class="header-section-number">11.3</span> Create SLURM Array Script</a></li>
+  <li><a href="#test-locally" id="toc-test-locally" class="nav-link" data-scroll-target="#test-locally"><span class="header-section-number">11.4</span> Test Locally</a></li>
+  <li><a href="#submit-to-hpc" id="toc-submit-to-hpc" class="nav-link" data-scroll-target="#submit-to-hpc"><span class="header-section-number">11.5</span> Submit to HPC</a></li>
   </ul></li>
   <li><a href="#best-practices" id="toc-best-practices" class="nav-link" data-scroll-target="#best-practices"><span class="header-section-number">12</span> Best Practices</a></li>
   <li><a href="#summary-1" id="toc-summary-1" class="nav-link" data-scroll-target="#summary-1"><span class="header-section-number">13</span> Summary</a></li>
@@ -2791,25 +2791,33 @@ chmod 644 ~/.ssh/config</code></pre>
 │
 ├── config/
 │   ├── config.yaml              # Shared, versioned, portable paths
-│   └── config_local.yaml        # Local-only, ignored by Git
+│   ├── config_local.yaml        # Local-only, ignored by Git
+│   └── samples_names.txt         # Sample identifiers list
 │
 ├── scripts/
-│   ├── utils/
-│   │   ├── init_project.sh      # Scaffolds folders and templates
-│   │   └── load_config.sh       # Loads YAML configuration
-│   ├── templates/               # Reusable script templates
-│   ├── 01_qc/                   # Quality control step
+│   ├── 01_qc/                   # Quality control analysis scripts
 │   │   ├── slurm_out/           # SLURM log files
 │   │   ├── 01_fastqc_one_sample.sh
-│   │   └── 01_fastqc_array.sbatch
-│   ├── 02_preprocessing/        # Preprocessing step
-│   │   ├── slurm_out/
-│   │   ├── 02_trim_one_sample.sh
-│   │   └── 02_trim_array.sbatch
-│   └── ...                      # Additional analysis steps
+│   │   ├── 01_fastqc_array.sbatch
+│   │   └── README.md
+│   ├── templates/               # Reusable script templates
+│   │   ├── analysis_script_template.sh
+│   │   ├── array_job_template.sbatch
+│   │   ├── job_slurm_template.sh
+│   │   └── slurm_out/
+│   └── utils/
+│       ├── init_project.sh      # Scaffolds folders and templates
+│       ├── load_config.sh       # Loads YAML configuration
+│       └── test_load_config.sh
 │
-└── docs/
-    └── bioinformatics_project_template.qmd  # Project documentation</code></pre>
+├── docs/
+│   ├── bioinformatics_project_template.qmd  # Project documentation
+│   ├── bioinformatics_project_template.html
+│   └── index.html
+│
+├── logs/                        # Job logs and outputs
+│
+└── README.md</code></pre>
 <section id="key-principles-1" class="level2" data-number="5.1">
 <h2 data-number="5.1" class="anchored" data-anchor-id="key-principles-1"><span class="header-section-number">5.1</span> Key Principles</h2>
 <ul>
@@ -3172,30 +3180,30 @@ sample_3</code></pre>
 <h1 data-number="11"><span class="header-section-number">11</span> Creating New Analysis Steps</h1>
 <p>To add a new analysis step (e.g., <code>02_preprocessing</code>):</p>
 <section id="create-directory-structure" class="level2" data-number="11.1">
-<h2 data-number="11.1" class="anchored" data-anchor-id="create-directory-structure"><span class="header-section-number">11.1</span> 1. Create Directory Structure</h2>
+<h2 data-number="11.1" class="anchored" data-anchor-id="create-directory-structure"><span class="header-section-number">11.1</span> Create Directory Structure</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb38"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> scripts/02_preprocessing/slurm_out</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> scripts/02_preprocessing/slurm_out/.gitkeep</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add scripts/02_preprocessing/slurm_out/.gitkeep</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p><strong>Note:</strong> The <code>.gitkeep</code> file is <strong>required</strong> so Git tracks the <code>slurm_out/</code> directory. SLURM needs this directory to exist before job submission.</p>
 </section>
 <section id="create-one-sample-script" class="level2" data-number="11.2">
-<h2 data-number="11.2" class="anchored" data-anchor-id="create-one-sample-script"><span class="header-section-number">11.2</span> 2. Create One-Sample Script</h2>
+<h2 data-number="11.2" class="anchored" data-anchor-id="create-one-sample-script"><span class="header-section-number">11.2</span> Create One-Sample Script</h2>
 <p>Copy and adapt the template:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> scripts/templates/analysis_script_template.sh scripts/02_preprocessing/02_trim_one_sample.sh</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Edit the script to: - Process your specific analysis (trimming, alignment, etc.) - Use appropriate input/output paths from <code>load_config.sh</code> - Load required modules or tools</p>
 </section>
 <section id="create-slurm-array-script" class="level2" data-number="11.3">
-<h2 data-number="11.3" class="anchored" data-anchor-id="create-slurm-array-script"><span class="header-section-number">11.3</span> 3. Create SLURM Array Script</h2>
+<h2 data-number="11.3" class="anchored" data-anchor-id="create-slurm-array-script"><span class="header-section-number">11.3</span> Create SLURM Array Script</h2>
 <p>Copy and adapt the template:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> scripts/templates/array_job_template.sbatch scripts/02_preprocessing/02_trim_array.sbatch</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Update: - Job name: <code>#SBATCH -J trim_array</code> - Array size: <code>#SBATCH --array=1-N</code> (N = sample count) - Script call: <code>bash scripts/02_preprocessing/02_trim_one_sample.sh &quot;$SAMPLE_ID&quot;</code></p>
 </section>
 <section id="test-locally" class="level2" data-number="11.4">
-<h2 data-number="11.4" class="anchored" data-anchor-id="test-locally"><span class="header-section-number">11.4</span> 4. Test Locally</h2>
+<h2 data-number="11.4" class="anchored" data-anchor-id="test-locally"><span class="header-section-number">11.4</span> Test Locally</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/02_preprocessing/02_trim_one_sample.sh sample_1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="submit-to-hpc" class="level2" data-number="11.5">
-<h2 data-number="11.5" class="anchored" data-anchor-id="submit-to-hpc"><span class="header-section-number">11.5</span> 5. Submit to HPC</h2>
+<h2 data-number="11.5" class="anchored" data-anchor-id="submit-to-hpc"><span class="header-section-number">11.5</span> Submit to HPC</h2>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb42"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Execute from repository root</span></span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /path/to/repository</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> scripts/02_preprocessing/02_trim_array.sbatch</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>

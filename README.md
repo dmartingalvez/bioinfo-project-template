@@ -17,16 +17,28 @@ A **generic, portable, and scalable template** for structuring any bioinformatic
 bioinfo-project-repo/
 ├── config/                    # Configuration files
 │   ├── config.yaml            # Shared, versioned paths & parameters
-│   └── config_local.yaml      # Machine-specific (never commit)
+│   ├── config_local.yaml      # Machine-specific (never commit)
+│   └── samples_names.txt       # Sample identifiers list
 ├── scripts/
-│   ├── bash/                  # One-sample analysis scripts
-│   ├── slurm/                 # HPC job wrappers
-│   ├── setup/
-│   │   └── init_project.sh    # Initialize project folders
-│   └── utils/
-│       └── load_config.sh     # Load YAML configuration
+│   ├── 01_qc/                 # Quality control analysis scripts
+│   │   ├── 01_fastqc_one_sample.sh
+│   │   ├── 01_fastqc_array.sbatch
+│   │   ├── README.md
+│   │   └── slurm_out/
+│   ├── templates/             # Script templates for new analyses
+│   │   ├── analysis_script_template.sh
+│   │   ├── array_job_template.sbatch
+│   │   ├── job_slurm_template.sh
+│   │   └── slurm_out/
+│   └── utils/                 # Utility scripts
+│       ├── init_project.sh    # Initialize project folders
+│       ├── load_config.sh     # Load YAML configuration
+│       └── test_load_config.sh
 ├── docs/
-│   └── bioinformatics_project_template.qmd    # Complete documentation
+│   ├── bioinformatics_project_template.qmd
+│   ├── bioinformatics_project_template.html
+│   └── index.html
+├── logs/                      # Job logs and outputs
 └── README.md
 ```
 
@@ -102,8 +114,8 @@ This template is designed to be **forked or cloned** as the basis for your proje
 |-------|----------|
 | SSH connection fails | Check `~/.ssh/config` and test with `ssh -v cluster` |
 | Missing `config_local.yaml` | Create it manually with your local paths (don't commit) |
-| Scripts not executable | Run `chmod +x scripts/bash/*.sh scripts/slurm/*.sbatch` |
-| SLURM job fails | Check job logs and verify `config/samples_list.txt` exists |
+| Scripts not executable | Run `chmod +x scripts/**/*.sh scripts/**/*.sbatch` |
+| SLURM job fails | Check job logs and verify `config/samples_names.txt` exists |
 
 ## Key Resources
 

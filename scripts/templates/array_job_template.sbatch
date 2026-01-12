@@ -1,12 +1,12 @@
 #!/bin/bash
 
 #SBATCH -J array_job_template
-#SBATCH -o slurm_out/%x_%A_%a.out
-#SBATCH -e slurm_out/%x_%A_%a.err
+#SBATCH -o scripts/<step>/slurm_out/%x_%A_%a.out
+#SBATCH -e scripts/<step>/slurm_out/%x_%A_%a.err
 #SBATCH -c 8
 #SBATCH --mem=16G
 #SBATCH -t 3-00:00:00
-#SBATCH --constrain=cal
+#SBATCH --constraint=cal
 #SBATCH --array=1-N
 
 ###############################################################################
@@ -27,6 +27,7 @@
 #
 # 2. Customize SLURM directives (top section):
 #    - Change job name: -J your_job_name
+#    - Update log paths: scripts/<your_step>/slurm_out/ (replace <step>)
 #    - Adjust CPU cores: -c <number>
 #    - Adjust memory: --mem=<amount>G
 #    - Set time limit: -t <HH:MM:SS> or <days-HH:MM:SS>

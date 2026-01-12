@@ -581,10 +581,11 @@ bash scripts/01_qc/01_fastqc_one_sample.sh sample_1
 # And writes to:  2_ANALYSES/Results/01_qc/
 ```
 
-Example implementation:
+### Example Implementation
 
 ```bash
 #!/bin/bash
+set -euo pipefail
 
 SAMPLE_ID="$1"
 
@@ -594,70 +595,36 @@ cd "$REPO_ROOT" || exit 1
 
 source scripts/utils/load_config.sh
 
-# Define output directory for this step
-OUTDIR="$ANALYSES_DIR/03_main_analysis"
+# Create output directory
+OUTDIR="$ANALYSES_DIR/Results/01_qc"
 mkdir -p "$OUTDIR"
 
-# Load tool (if using module system)
+# Load module if available
 if command -v module &> /dev/null; then
-    module load my-analysis-tool  # Replace with your actual tool
-else
-    echo "my-analysis-tool: no module system in this environment"
+    module load fastqc
 fi
 
-# Run analysis on one sample
-my-analysis-tool --input "$RAW_DIR/${SAMPLE_ID}.data" \
-                 --output "$OUTDIR/${SAMPLE_ID}.results" \
-                 --threads "$THREADS"
+# Run analysis
+fastqc -t "$THREADS" -o "$OUTDIR" "$FASTQ_RAW_DIR/${SAMPLE_ID}"*.fastq.gz
+
+echo "FastQC completed for $SAMPLE_ID"
 ```
 
-This script architecture:
-* Processes **one sample** only.
-* Is independent of SLURM (runs locally or in HPC).
-* Can be tested on macOS, then scaled via SLURM arrays.
-* Uses configuration via `load_config.sh`.
-* Can be adapted to any bioinformatics tool or workflow step.
+### Sample List Format
 
-## Sample List File
-
-Generate a file listing sample identifiers (or other items to analyze) from your data.
-
-**Script location:** `scripts/utils/extract_samples_from_input.sh`
-
-### What it does
-
-* Extracts unique sample/item identifiers from input files.
-* Handles flexible input formats (directory listing, metadata file, etc.).
-* Auto-deduplicates and sorts.
-* Outputs to `config/samples_list.txt`.
-
-### Usage
-
-**Auto-detect input files:**
-
-```bash
-bash scripts/utils/extract_samples_from_input.sh
-```
-
-**Provide input explicitly:**
-
-```bash
-bash scripts/utils/extract_samples_from_input.sh /path/to/metadata.csv
-```
-
-### Output
-
-`config/samples_list.txt`:
+Create `config/samples_names.txt` with one sample ID per line:
 
 ```
-SAMPLE_001
-SAMPLE_002
-SAMPLE_003
-SAMPLE_004
-SAMPLE_005
+sample_1
+sample_2
+sample_3
 ```
 
-Each line corresponds to one array task index and can represent any item to analyze (sample, individual, region, etc.).
+Array jobs use this file to determine:
+- Number of tasks: `--array=1-N` where N = line count
+- Sample assignment: Each task gets one line based on `SLURM_ARRAY_TASK_ID`
+
+---
 
 ## SLURM Array Jobs
 
@@ -675,7 +642,8 @@ scripts/<step>/
 ### Quick Start
 
 ```bash
-# Submit all samples as parallel tasks
+# Submit all samples as parallel tasks (from repository root)
+cd /path/to/repository
 sbatch scripts/01_qc/01_fastqc_array.sbatch
 
 # Monitor
@@ -692,43 +660,62 @@ The array job:
 4. Results are combined in `2_ANALYSES/Results/01_qc/`
 
 ### Example SLURM Script
-#!/bin/bash
-#SBATCH --job-name=analysis_array
-#SBATCH -o slurm_out/%x_%A_%a.out
-#SBATCH -e slurm_out/%x_%A_%a.err
-#SBATCH --cpus-per-task=4
-#SBATCH --mem=8G
-#SBATCH --time=02:00:00
-#SBATCH --partition=short
-#SBATCH --array=1-N      # Adjust N to match number of items in samples_list.txt
 
-REPO_ROOT="$HOME/Repositories/my-analysis-repo"
+```bash
+#!/bin/bash
+#SBATCH -J fastqc_array
+#SBATCH -o scripts/01_qc/slurm_out/%x_%A_%a.out
+#SBATCH -e scripts/01_qc/slurm_out/%x_%A_%a.err
+#SBATCH -c 8
+#SBATCH --mem=16G
+#SBATCH -t 3-00:00:00
+#SBATCH --constraint=cal
+#SBATCH --array=1-N      # N = number of samples
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$SCRIPT_DIR/../.."
 cd "$REPO_ROOT" || exit 1
 
 source scripts/utils/load_config.sh
 
 SAMPLES_FILE="config/samples_names.txt"
-ITEM_ID=$(sed -n "${SLURM_ARRAY_TASK_ID}p" "$SAMPLES_FILE")
+mapfile -t SAMPLES < "$SAMPLES_FILE"
+TASK_ID=$((SLURM_ARRAY_TASK_ID - 1))
+SAMPLE_ID="${SAMPLES[$TASK_ID]}"
 
-echo "Processing item: $ITEM_ID (array task ${SLURM_ARRAY_TASK_ID})"
+echo "Processing sample: $SAMPLE_ID (task ${SLURM_ARRAY_TASK_ID})"
 
-# Call your one-sample script from the same directory
+# Call one-sample script
 bash scripts/01_qc/01_fastqc_one_sample.sh "$SAMPLE_ID"
 ```
 
-### How it works
+### Key Features
 
-* `SLURM_ARRAY_TASK_ID` provides task index (starting from 1 by default).
-* `sed` extracts corresponding line from samples list.
-* Each task launches the Bash script on a different item.
-* Submit: `sbatch scripts/01_qc/01_fastqc_array.sbatch`
+* **One sample per task**: `SLURM_ARRAY_TASK_ID` indexes into sample list
+* **Parallel execution**: All samples run simultaneously on HPC
+* **Simple submission**: `sbatch scripts/01_qc/01_fastqc_array.sbatch`
+* **Reusability**: Same one-sample script for local testing and HPC
+* **Log separation**: Each task has its own log file in `slurm_out/`
 
-### Benefits
+### Important: Log Directory Requirements
 
-* **Reusability**: Bash scripts tested locally, reused on HPC.
-* **Scalability**: SLURM arrays distribute samples efficiently.
-* **Clean architecture**: No duplication of logic.
-* **Flexibility**: Changing sample lists doesn't require editing scripts.
+**⚠️ Critical:** SLURM requires the log directory to exist **before** job submission.
+
+* The repository includes `.gitkeep` files in each `slurm_out/` directory
+* This ensures `slurm_out/` exists when you clone the repository
+* SLURM **cannot create** the log directory automatically
+* If the directory doesn't exist, job submission will **fail**
+
+**Why .gitkeep?**
+Git doesn't track empty directories. The `.gitkeep` file forces Git to include the `slurm_out/` directory in the repository, ensuring it exists for all users.
+
+**For new analysis steps:**
+When creating a new step (e.g., `scripts/02_preprocessing/`), always:
+```bash
+mkdir -p scripts/02_preprocessing/slurm_out
+touch scripts/02_preprocessing/slurm_out/.gitkeep
+git add scripts/02_preprocessing/slurm_out/.gitkeep
+```
 
 ---
 
@@ -838,6 +825,64 @@ bash scripts/utils/init_project.sh -p /fstrat/dmartin/sparrow-analysis -n run_20
 - **Separation of concerns**: Code vs. Data
 - **Portability**: Only analysis folder location changes between machines
 - **Symlink advantage**: Scripts always up-to-date with repository changes
+
+---
+
+# Creating New Analysis Steps
+
+To add a new analysis step (e.g., `02_preprocessing`):
+
+## 1. Create Directory Structure
+
+```bash
+mkdir -p scripts/02_preprocessing/slurm_out
+touch scripts/02_preprocessing/slurm_out/.gitkeep
+git add scripts/02_preprocessing/slurm_out/.gitkeep
+```
+
+**Note:** The `.gitkeep` file is **required** so Git tracks the `slurm_out/` directory. SLURM needs this directory to exist before job submission.
+
+## 2. Create One-Sample Script
+
+Copy and adapt the template:
+
+```bash
+cp scripts/templates/analysis_script_template.sh scripts/02_preprocessing/02_trim_one_sample.sh
+```
+
+Edit the script to:
+- Process your specific analysis (trimming, alignment, etc.)
+- Use appropriate input/output paths from `load_config.sh`
+- Load required modules or tools
+
+## 3. Create SLURM Array Script
+
+Copy and adapt the template:
+
+```bash
+cp scripts/templates/array_job_template.sbatch scripts/02_preprocessing/02_trim_array.sbatch
+```
+
+Update:
+- Job name: `#SBATCH -J trim_array`
+- Array size: `#SBATCH --array=1-N` (N = sample count)
+- Script call: `bash scripts/02_preprocessing/02_trim_one_sample.sh "$SAMPLE_ID"`
+
+## 4. Test Locally
+
+```bash
+bash scripts/02_preprocessing/02_trim_one_sample.sh sample_1
+```
+
+## 5. Submit to HPC
+
+```bash
+# Execute from repository root
+cd /path/to/repository
+sbatch scripts/02_preprocessing/02_trim_array.sbatch
+```
+
+**Important:** Always execute `sbatch` from the repository root directory. Log paths in SLURM directives (`#SBATCH -o` and `-e`) are relative to the repository root.
 
 ---
 

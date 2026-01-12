@@ -1,0 +1,2 @@
+# This file ensures the slurm_out directory is tracked by git
+# SLURM requires this directory to exist before job submission

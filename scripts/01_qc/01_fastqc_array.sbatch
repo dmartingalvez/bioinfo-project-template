@@ -1,12 +1,12 @@
 #!/bin/bash
 
 #SBATCH -J fastqc_array
-#SBATCH -o slurm_out/%x_%A_%a.out
-#SBATCH -e slurm_out/%x_%A_%a.err
+#SBATCH -o scripts/01_qc/slurm_out/%x_%A_%a.out
+#SBATCH -e scripts/01_qc/slurm_out/%x_%A_%a.err
 #SBATCH -c 8
 #SBATCH --mem=16G
 #SBATCH -t 3-00:00:00
-#SBATCH --constrain=cal
+#SBATCH --constraint=cal
 #SBATCH --array=1-2
 
 ###############################################################################
@@ -14,15 +14,16 @@
 #
 # This script submits an array job to SLURM that:
 # 1. Reads sample names from config/samples_names.txt
-# 2. For each sample, executes bash/01_fastqc_one_sample.sh
+# 2. For each sample, executes 01_fastqc_one_sample.sh
 # 3. Processes samples in parallel (one per SLURM task)
 #
 # USAGE:
-#   sbatch scripts/slurm/01_fastqc_array.sh
+#   sbatch scripts/01_qc/01_fastqc_array.sbatch
 #
 # NOTES:
+#   - Execute from repository root directory
 #   - Update #SBATCH --array=1-N to match number of samples
-#   - Log files saved to: scripts/slurm/slurm_out/fastqc_array_<job_id>_<task_id>.out
+#   - Log files saved to: scripts/01_qc/slurm_out/fastqc_array_<job_id>_<task_id>.out
 #   - Constraint: cal (execute on cal nodes)
 #   - Time limit: 3 days
 #

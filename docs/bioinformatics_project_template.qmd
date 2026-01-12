@@ -102,7 +102,11 @@ This repository is configured as a **GitHub Template Repository**, which allows 
 
 4. **Initialize project structure:**
    ```bash
-   bash scripts/setup/init_project.sh
+   # Specify parent path and analysis folder name
+   bash scripts/setup/init_project.sh -p /path/to/parent -n analysis_name
+   
+   # Example: Create analysis folder 'run_20260112' in your project area
+   bash scripts/setup/init_project.sh -p /fstrat/username/my-project -n run_20260112
    ```
 
 ### Advantages of Template Repository vs Manual Cloning
@@ -125,12 +129,13 @@ This repository is configured as a **GitHub Template Repository**, which allows 
 
 2. **Set up SSH keys** (see Section 4 for detailed instructions)
 
-3. **Create machine-specific configuration:**
+3. **Initialize analysis folder** (see detailed instructions in Section on Initialize the Project):
    ```bash
-   # Example config/config_local.yaml
-   echo "base_dir: \"/path/to/your/project/data\"" > config/config_local.yaml
-   echo "repo_dir: \"$PWD\"" >> config/config_local.yaml
+   # Create your analysis folder with appropriate name
+   bash scripts/setup/init_project.sh -p /path/to/parent -n analysis_folder
    ```
+   
+   This will automatically create `config/config_local.yaml` with correct paths.
 
 4. **Start developing:** Add your data paths, customize scripts, and begin analysis
 
@@ -413,10 +418,10 @@ Generic example (adapt to your analysis type):
 
 ```yaml
 paths:
-  raw_data:       "1_DATA/RAW"
-  processed_data: "1_DATA/PROCESSED"
-  reference:      "1_DATA/REFERENCE"
-  analyses:       "2_ANALYSES"
+  fastq_raw:       "1_DATA/FASTQ"
+  fastq_processed: "2_ANALYSES/Results/02_preprocessing"
+  reference:       "1_DATA/REFERENCE"
+  analyses:        "2_ANALYSES"
 
 cluster:
   threads: 8
@@ -489,14 +494,14 @@ BASE_DIR=$(yq -r '.base_dir' "$LOCAL_CONFIG")
 REPO_DIR=$(yq -r '.repo_dir' "$LOCAL_CONFIG")
 
 # Relative paths from config.yaml
-RAW_REL=$(yq -r '.paths.fastq_raw' "$MAIN_CONFIG")
-CLEAN_REL=$(yq -r '.paths.fastq_clean' "$MAIN_CONFIG")
+FASTQ_RAW_REL=$(yq -r '.paths.fastq_raw' "$MAIN_CONFIG")
+FASTQ_PROC_REL=$(yq -r '.paths.fastq_processed' "$MAIN_CONFIG")
 REF_REL=$(yq -r '.paths.reference' "$MAIN_CONFIG")
 ANALYSES_REL=$(yq -r '.paths.analyses' "$MAIN_CONFIG")
 
 # Build absolute paths
-FASTQ_RAW_DIR="$BASE_DIR/$RAW_REL"
-FASTQ_CLEAN_DIR="$BASE_DIR/$CLEAN_REL"
+FASTQ_RAW_DIR="$BASE_DIR/$FASTQ_RAW_REL"
+FASTQ_PROC_DIR="$BASE_DIR/$FASTQ_PROC_REL"
 REFERENCE_DIR="$BASE_DIR/$REF_REL"
 ANALYSES_DIR="$BASE_DIR/$ANALYSES_REL"
 
@@ -516,30 +521,25 @@ This structure exists **outside the repository**, typically on NAS or local stor
 my-analysis/
 │
 ├── 1_DATA/
-│   ├── RAW/                  # Original input files (read-only)
-│   │   ├── sequences/        # FASTQ, BAM, VCF, or other input formats
-│   │   └── metadata/
+│   ├── FASTQ/                # Original FASTQ files (read-only)
+│   │   ├── sample_1_R1.fastq.gz
+│   │   ├── sample_1_R2.fastq.gz
+│   │   ├── sample_2_R1.fastq.gz
+│   │   └── sample_2_R2.fastq.gz
 │   │
 │   ├── REFERENCE/            # Reference data and indices
 │   │   ├── GENOME/           # Reference sequences (FASTA)
 │   │   ├── ANNOTATION/       # Gene annotations (GTF/GFF3/BED)
 │   │   └── INDEXES/          # Pre-built indices (tool-specific)
-│   │
-│   └── PROCESSED/            # Stable derived data (if needed)
-│       └── cleaned/
 │
 ├── 2_ANALYSES/
 │   ├── Scripts/              # symlink to repository scripts
 │   └── Results/
-│       ├── 01_qc/            # Quality control outputs
-│       ├── 02_preprocessing/ # Trimming, filtering, etc.
-│       ├── 03_main_analysis/ # Primary analysis step
+│       ├── 01_qc/            # Quality control outputs (FastQC, etc.)
+│       ├── 02_preprocessing/ # Processed FASTQ, trimming outputs
+│       ├── 03_main_analysis/ # Alignment, quantification, etc.
 │       ├── 04_tables/        # Results tables
-│       └── 05_figures/        # Plots and visualizations
-│
-├── 3_FIGURES/
-├── 4_TABLES/
-└── 5_PUBLICATION/
+│       └── 05_figures/       # Plots and visualizations
 ```
 
 Note: prefer creating these folders incrementally as bioinformatics analysis steps are executed and needed. There is no need to pre-create the entire structure; scripts can create required paths on demand (for example, `init_project.sh` and analysis scripts create `2_ANALYSES/Results/<step>` when appropriate). This approach avoids empty directories, reduces organizational errors, and improves traceability.
@@ -595,7 +595,7 @@ This script architecture:
 * Uses configuration via `load_config.sh`.
 * Can be adapted to any bioinformatics tool or workflow step.
 
-## 8.2 Sample List File
+## Sample List File
 
 Generate a file listing sample identifiers (or other items to analyze) from your data.
 
@@ -636,7 +636,7 @@ SAMPLE_005
 
 Each line corresponds to one array task index and can represent any item to analyze (sample, individual, region, etc.).
 
-## 8.3 SLURM Array Jobs
+## SLURM Array Jobs
 
 Path: `scripts/slurm/01_analysis_array.sbatch`
 
@@ -681,9 +681,9 @@ bash scripts/bash/01_analysis_one_sample.sh "$ITEM_ID"
 
 ---
 
-# 9. Storage Architecture (macOS, HOME, fstrat, NAS)
+# Storage Architecture (macOS, HOME, fstrat, NAS)
 
-## 9.1 Summary
+## Summary
 
 * **macOS:** Development, testing, documentation.
 * **HOME:** Repository + lightweight files.
@@ -692,7 +692,7 @@ bash scripts/bash/01_analysis_one_sample.sh "$ITEM_ID"
 
 All scripts behave identically because they rely on **BASE_DIR** and **REPO_DIR**.
 
-## 9.2 fstrat Execution Workspace (Per-Run)
+## fstrat Execution Workspace (Per-Run)
 
 Within each run directory:
 
@@ -713,7 +713,7 @@ ln -s "$REPO_DIR/scripts" "$BASE_DIR/2_ANALYSES/Scripts/scripts_repo"
 
 This ensures traceability without duplicating code.
 
-## 9.3 Synchronizing Results from fstrat to NAS
+## Synchronizing Results from fstrat to NAS
 
 After execution:
 
@@ -726,7 +726,7 @@ This pattern allows:
 * Durable storage on NAS.
 * Clean reproducibility.
 
-## 9.4 Environment-Dependent Configuration
+## Environment-Dependent Configuration
 
 Only two variables change across machines:
 
@@ -739,22 +739,58 @@ All scripts use these paths indirectly through `load_config.sh`.
 
 ---
 
-# 10. Initialize the Project
+# Initialize the Project
 
 Use `scripts/setup/init_project.sh` to create folders and templates:
 
 ```bash
-bash scripts/setup/init_project.sh
+# View help and options
+bash scripts/setup/init_project.sh --help
+
+# Initialize project with specified parent path and folder name
+bash scripts/setup/init_project.sh -p <parent-path> -n <folder-name>
+
+# Example: Create analysis folder 'run_20260112' in '/fstrat/dmartin/sparrow-analysis'
+bash scripts/setup/init_project.sh -p /fstrat/dmartin/sparrow-analysis -n run_20260112
 ```
 
-This script will:
-- Create base folders (`1_DATA`, `2_ANALYSES`, `3_FIGURES`, etc.)
-- Copy script templates
-- Create `config/config.yaml` and `config/config_local.yaml` if missing
+**Required Arguments:**
+
+- `-p, --parent-path PATH`: Parent directory where the analysis folder will be created
+- `-n, --folder-name NAME`: Name of the analysis folder (e.g., `run_20260112`, `experiment_01`)
+
+**What the script does:**
+
+1. Creates the analysis folder structure:
+   ```
+   <parent-path>/<folder-name>/
+   ├── 1_DATA/              # Minimal replicated inputs
+   └── 2_ANALYSES/
+       ├── Scripts/         # Symlink to repository scripts
+       └── Results/         # All outputs generated here
+   ```
+
+2. Creates a symbolic link: `2_ANALYSES/Scripts/` → repository `scripts/` folder
+
+3. Creates repository configuration files if missing:
+   - `config/config.yaml` → shared, versioned configuration
+   - `config/config_local.yaml` → private, machine-specific configuration
+
+4. Creates script templates in `scripts/templates/`:
+   - `job_slurm_template.sh` → SLURM job template
+   - `analysis_script_template.sh` → Generic analysis script
+
+**Structure Philosophy:**
+
+- **Repository folder** (this repo): Contains scripts, config, docs (version-controlled)
+- **Analysis folder** (created by script): Contains data and results (not version-controlled)
+- **Separation of concerns**: Code vs. Data
+- **Portability**: Only analysis folder location changes between machines
+- **Symlink advantage**: Scripts always up-to-date with repository changes
 
 ---
 
-# 11. Best Practices
+# Best Practices
 
 * Always `source scripts/utils/load_config.sh` at the start of analysis scripts.
 * Never modify `1_DATA/` during analyses; write outputs to `2_ANALYSES/`.
@@ -766,7 +802,7 @@ This script will:
 
 ---
 
-# 12. Summary
+# Summary
 
 * `config.yaml` → shared, versioned, general settings.
 * `config_local.yaml` → local, private, machine-specific.
@@ -779,15 +815,22 @@ This script will:
 
 ---
 
-# 13. Next Steps
+# Next Steps
 
 Before you start:
+
 - **Configure SSH keys** for secure, password-free access to GitHub, cluster, and NAS (see Section 4).
+
 - **Set up `.ssh/config`** to manage multiple connections efficiently.
+
 - **Install VS Code Remote-SSH** for seamless cluster interaction.
 
 For your project:
+
 - Adapt scripts to your specific analysis pipeline.
+
 - Add workflows (Snakemake/Nextflow) for complex dependencies.
+
 - Create reproducible environments (`environment.yml`, `renv.lock`, or `requirements.txt`).
+
 - Document analysis steps and parameters in Quarto reports.

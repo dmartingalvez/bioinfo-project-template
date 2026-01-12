@@ -2,21 +2,134 @@
 set -euo pipefail
 
 # Initialize a generic bioinformatics project structure in the current repo
+
+# Display usage information
+usage() {
+  cat <<EOF
+Usage: $(basename "$0") [OPTIONS]
+
+Initialize a bioinformatics project structure with:
+  - Repository folder: Contains scripts, config, docs (this repository)
+  - Analysis folder: Contains data and results (created in specified location)
+
+OPTIONS:
+  -p, --parent-path PATH    Parent path where the analysis folder will be created
+                            (required)
+  -n, --folder-name NAME    Name of the analysis folder to create
+                            (required)
+  -h, --help                Display this help message
+
+STRUCTURE CREATED:
+  <parent-path>/<folder-name>/
+  ├── 1_DATA/               # Minimal replicated inputs
+  └── 2_ANALYSES/
+      ├── Scripts/          # Symlink to repository scripts
+      └── Results/          # All outputs generated here
+
+EXAMPLES:
+  # Create analysis folder 'run_20251209' in /fstrat/dmartin/my-analysis
+  $(basename "$0") -p /fstrat/dmartin/my-analysis -n run_20251209
+
+  # Using long options
+  $(basename "$0") --parent-path /Volumes/Data/projects --folder-name experiment_01
+
+NOTES:
+  - The repository directory will always be the location of this repository
+  - The Scripts/ folder will be a symbolic link to the repository's scripts/
+  - Configuration will be saved in config/config_local.yaml
+
+EOF
+  exit 0
+}
+
+# Parse command line arguments
+PARENT_PATH=""
+FOLDER_NAME=""
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    -p|--parent-path)
+      PARENT_PATH="$2"
+      shift 2
+      ;;
+    -n|--folder-name)
+      FOLDER_NAME="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      ;;
+    *)
+      echo "ERROR: Unknown option: $1" >&2
+      echo "Use --help for usage information" >&2
+      exit 1
+      ;;
+  esac
+done
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="${SCRIPT_DIR}/../.."
 cd "$REPO_ROOT"
 
-# Create base folders
-mkdir -p config docs scripts/utils scripts/templates scripts/setup analyses data/raw data/processed reference logs
+# Validate required arguments
+if [[ -z "$PARENT_PATH" ]] || [[ -z "$FOLDER_NAME" ]]; then
+  echo "ERROR: Both --parent-path and --folder-name are required" >&2
+  echo "Use --help for usage information" >&2
+  exit 1
+fi
+
+# Create parent path if it doesn't exist
+if [[ ! -d "$PARENT_PATH" ]]; then
+  echo "Creating parent directory: $PARENT_PATH"
+  mkdir -p "$PARENT_PATH"
+fi
+
+# Convert to absolute path
+PARENT_PATH="$(cd "$PARENT_PATH" && pwd)"
+BASE_DIR="$PARENT_PATH/$FOLDER_NAME"
+
+# Check if analysis folder already exists
+if [[ -d "$BASE_DIR" ]]; then
+  echo "WARNING: Analysis folder already exists: $BASE_DIR" >&2
+  read -p "Do you want to continue and update the structure? (y/N) " -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "Aborted."
+    exit 1
+  fi
+else
+  echo "Creating analysis folder: $BASE_DIR"
+  mkdir -p "$BASE_DIR"
+fi
+
+# Create base folders in repository
+mkdir -p config docs scripts/utils scripts/templates scripts/setup
+
+# Create analysis folder structure in base directory
+echo "Creating analysis folder structure..."
+mkdir -p "$BASE_DIR/1_DATA"
+mkdir -p "$BASE_DIR/2_ANALYSES/Results"
+
+# Create symlink to repository scripts
+SCRIPTS_LINK="$BASE_DIR/2_ANALYSES/Scripts"
+if [[ -L "$SCRIPTS_LINK" ]]; then
+  echo "Symlink already exists: $SCRIPTS_LINK"
+elif [[ -e "$SCRIPTS_LINK" ]]; then
+  echo "WARNING: $SCRIPTS_LINK exists but is not a symlink. Skipping symlink creation."
+else
+  ln -s "$(pwd)/scripts" "$SCRIPTS_LINK"
+  echo "Created symlink: $SCRIPTS_LINK -> $(pwd)/scripts"
+fi
+
+echo "Analysis folder structure created in: $BASE_DIR"
 
 # Create default config files if missing
 if [[ ! -f config/config.yaml ]]; then
   cat > config/config.yaml <<'YAML'
 paths:
-  data_raw: data/raw
-  data_processed: data/processed
-  reference: reference
-  analyses: analyses
+  data: 1_DATA
+  analyses: 2_ANALYSES
+  results: 2_ANALYSES/Results
 project:
   name: "bioinfo-project"
 cluster:
@@ -29,8 +142,9 @@ fi
 
 if [[ ! -f config/config_local.yaml ]]; then
   cat > config/config_local.yaml <<YAML
-base_dir: "$(pwd)"
+base_dir: "$BASE_DIR"
 repo_dir: "$(pwd)"
+analysis_name: "$FOLDER_NAME"
 YAML
   echo "Created config/config_local.yaml"
 fi
@@ -59,15 +173,13 @@ REPO_DIR=$(yq -r '.repo_dir' "$LOCAL_CONFIG")
 if [[ "$BASE_DIR" == ~* ]]; then BASE_DIR="${BASE_DIR/#\~/$HOME}"; fi
 if [[ "$REPO_DIR" == ~* ]]; then REPO_DIR="${REPO_DIR/#\~/$HOME}"; fi
 
-RAW_REL=$(yq -r '.paths.data_raw' "$MAIN_CONFIG")
-PROC_REL=$(yq -r '.paths.data_processed' "$MAIN_CONFIG")
-REF_REL=$(yq -r '.paths.reference' "$MAIN_CONFIG")
+DATA_REL=$(yq -r '.paths.data' "$MAIN_CONFIG")
 ANALYSES_REL=$(yq -r '.paths.analyses' "$MAIN_CONFIG")
+RESULTS_REL=$(yq -r '.paths.results' "$MAIN_CONFIG")
 
-DATA_RAW_DIR="$BASE_DIR/$RAW_REL"
-DATA_PROCESSED_DIR="$BASE_DIR/$PROC_REL"
-REFERENCE_DIR="$BASE_DIR/$REF_REL"
+DATA_DIR="$BASE_DIR/$DATA_REL"
 ANALYSES_DIR="$BASE_DIR/$ANALYSES_REL"
+RESULTS_DIR="$BASE_DIR/$RESULTS_REL"
 
 THREADS=$(yq -r '.cluster.threads' "$MAIN_CONFIG")
 MEMORY=$(yq -r '.cluster.memory' "$MAIN_CONFIG")
@@ -99,7 +211,7 @@ cd "$REPO_ROOT"
 source scripts/utils/load_config.sh
 
 # Example command
-# your_tool --threads "$THREADS" --input "$DATA_RAW_DIR" --output "$ANALYSES_DIR/example"
+# your_tool --threads "$THREADS" --input "$DATA_DIR" --output "$RESULTS_DIR/example"
 BASH
 chmod +x scripts/templates/job_slurm_template.sh
 
@@ -114,11 +226,31 @@ cd "$REPO_ROOT"
 
 source scripts/utils/load_config.sh
 
-# Read from "$DATA_RAW_DIR" and write results to "$ANALYSES_DIR"
+# Example: Read from "$DATA_DIR" and write results to "$RESULTS_DIR"
 BASH
 chmod +x scripts/templates/analysis_script_template.sh
 
 # Logs dir for SLURM
 mkdir -p logs
 
-echo "Project scaffolding complete. Edit config/config.yaml and start building your analysis."
+echo "========================================"
+echo "Project scaffolding complete!"
+echo "========================================"
+echo "Repository directory:  $(pwd)"
+echo "Analysis base folder:  $BASE_DIR"
+echo "Analysis name:         $FOLDER_NAME"
+echo ""
+echo "Structure created:"
+echo "  $BASE_DIR/"
+echo "  ├── 1_DATA/              (your input data)"
+echo "  └── 2_ANALYSES/"
+echo "      ├── Scripts/         (symlink to repo scripts)"
+echo "      └── Results/         (analysis outputs)"
+echo ""
+echo "Next steps:"
+echo "  1. Place your input data in: $BASE_DIR/1_DATA/"
+echo "  2. Edit config/config.yaml for project settings"
+echo "  3. Review config/config_local.yaml for paths"
+echo "  4. Use scripts via: $BASE_DIR/2_ANALYSES/Scripts/"
+echo "  5. Results will be saved in: $BASE_DIR/2_ANALYSES/Results/"
+echo "========================================"

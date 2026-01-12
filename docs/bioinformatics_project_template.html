@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="David Martín-Gálvez">
-<meta name="dcterms.date" content="2026-01-09">
+<meta name="dcterms.date" content="2026-01-12">
 
 <title>Bioinformatics Project Template</title>
 <style>
@@ -2275,29 +2275,29 @@ vertical-align: -.125em;
   <li><a href="#script-architecture" id="toc-script-architecture" class="nav-link" data-scroll-target="#script-architecture"><span class="header-section-number">8</span> Script Architecture</a>
   <ul class="collapse">
   <li><a href="#one-sample-bash-scripts" id="toc-one-sample-bash-scripts" class="nav-link" data-scroll-target="#one-sample-bash-scripts"><span class="header-section-number">8.1</span> One-Sample Bash Scripts</a></li>
-  <li><a href="#sample-list-file" id="toc-sample-list-file" class="nav-link" data-scroll-target="#sample-list-file"><span class="header-section-number">8.2</span> 8.2 Sample List File</a>
+  <li><a href="#sample-list-file" id="toc-sample-list-file" class="nav-link" data-scroll-target="#sample-list-file"><span class="header-section-number">8.2</span> Sample List File</a>
   <ul class="collapse">
   <li><a href="#what-it-does" id="toc-what-it-does" class="nav-link" data-scroll-target="#what-it-does"><span class="header-section-number">8.2.1</span> What it does</a></li>
   <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage"><span class="header-section-number">8.2.2</span> Usage</a></li>
   <li><a href="#output" id="toc-output" class="nav-link" data-scroll-target="#output"><span class="header-section-number">8.2.3</span> Output</a></li>
   </ul></li>
-  <li><a href="#slurm-array-jobs" id="toc-slurm-array-jobs" class="nav-link" data-scroll-target="#slurm-array-jobs"><span class="header-section-number">8.3</span> 8.3 SLURM Array Jobs</a>
+  <li><a href="#slurm-array-jobs" id="toc-slurm-array-jobs" class="nav-link" data-scroll-target="#slurm-array-jobs"><span class="header-section-number">8.3</span> SLURM Array Jobs</a>
   <ul class="collapse">
   <li><a href="#how-it-works" id="toc-how-it-works" class="nav-link" data-scroll-target="#how-it-works"><span class="header-section-number">8.3.1</span> How it works</a></li>
   <li><a href="#benefits" id="toc-benefits" class="nav-link" data-scroll-target="#benefits"><span class="header-section-number">8.3.2</span> Benefits</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#storage-architecture-macos-home-fstrat-nas" id="toc-storage-architecture-macos-home-fstrat-nas" class="nav-link" data-scroll-target="#storage-architecture-macos-home-fstrat-nas"><span class="header-section-number">9</span> 9. Storage Architecture (macOS, HOME, fstrat, NAS)</a>
+  <li><a href="#storage-architecture-macos-home-fstrat-nas" id="toc-storage-architecture-macos-home-fstrat-nas" class="nav-link" data-scroll-target="#storage-architecture-macos-home-fstrat-nas"><span class="header-section-number">9</span> Storage Architecture (macOS, HOME, fstrat, NAS)</a>
   <ul class="collapse">
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">9.1</span> 9.1 Summary</a></li>
-  <li><a href="#fstrat-execution-workspace-per-run" id="toc-fstrat-execution-workspace-per-run" class="nav-link" data-scroll-target="#fstrat-execution-workspace-per-run"><span class="header-section-number">9.2</span> 9.2 fstrat Execution Workspace (Per-Run)</a></li>
-  <li><a href="#synchronizing-results-from-fstrat-to-nas" id="toc-synchronizing-results-from-fstrat-to-nas" class="nav-link" data-scroll-target="#synchronizing-results-from-fstrat-to-nas"><span class="header-section-number">9.3</span> 9.3 Synchronizing Results from fstrat to NAS</a></li>
-  <li><a href="#environment-dependent-configuration" id="toc-environment-dependent-configuration" class="nav-link" data-scroll-target="#environment-dependent-configuration"><span class="header-section-number">9.4</span> 9.4 Environment-Dependent Configuration</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">9.1</span> Summary</a></li>
+  <li><a href="#fstrat-execution-workspace-per-run" id="toc-fstrat-execution-workspace-per-run" class="nav-link" data-scroll-target="#fstrat-execution-workspace-per-run"><span class="header-section-number">9.2</span> fstrat Execution Workspace (Per-Run)</a></li>
+  <li><a href="#synchronizing-results-from-fstrat-to-nas" id="toc-synchronizing-results-from-fstrat-to-nas" class="nav-link" data-scroll-target="#synchronizing-results-from-fstrat-to-nas"><span class="header-section-number">9.3</span> Synchronizing Results from fstrat to NAS</a></li>
+  <li><a href="#environment-dependent-configuration" id="toc-environment-dependent-configuration" class="nav-link" data-scroll-target="#environment-dependent-configuration"><span class="header-section-number">9.4</span> Environment-Dependent Configuration</a></li>
   </ul></li>
-  <li><a href="#initialize-the-project" id="toc-initialize-the-project" class="nav-link" data-scroll-target="#initialize-the-project"><span class="header-section-number">10</span> 10. Initialize the Project</a></li>
-  <li><a href="#best-practices" id="toc-best-practices" class="nav-link" data-scroll-target="#best-practices"><span class="header-section-number">11</span> 11. Best Practices</a></li>
-  <li><a href="#summary-1" id="toc-summary-1" class="nav-link" data-scroll-target="#summary-1"><span class="header-section-number">12</span> 12. Summary</a></li>
-  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps"><span class="header-section-number">13</span> 13. Next Steps</a></li>
+  <li><a href="#initialize-the-project" id="toc-initialize-the-project" class="nav-link" data-scroll-target="#initialize-the-project"><span class="header-section-number">10</span> Initialize the Project</a></li>
+  <li><a href="#best-practices" id="toc-best-practices" class="nav-link" data-scroll-target="#best-practices"><span class="header-section-number">11</span> Best Practices</a></li>
+  <li><a href="#summary-1" id="toc-summary-1" class="nav-link" data-scroll-target="#summary-1"><span class="header-section-number">12</span> Summary</a></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps"><span class="header-section-number">13</span> Next Steps</a></li>
   </ul>
 </nav>
 </div>
@@ -2322,7 +2322,7 @@ vertical-align: -.125em;
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 9, 2026</p>
+      <p class="date">January 12, 2026</p>
     </div>
   </div>
   
@@ -2462,7 +2462,11 @@ vertical-align: -.125em;
 <li>Create sample list: Generate <code>config/samples_list.txt</code> with your sample identifiers</li>
 </ul></li>
 <li><p><strong>Initialize project structure:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/setup/init_project.sh</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify parent path and analysis folder name</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/setup/init_project.sh <span class="at">-p</span> /path/to/parent <span class="at">-n</span> analysis_name</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: Create analysis folder &#39;run_20260112&#39; in your project area</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/setup/init_project.sh <span class="at">-p</span> /fstrat/username/my-project <span class="at">-n</span> run_20260112</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 </ol>
 </section>
 <section id="advantages-of-template-repository-vs-manual-cloning" class="level3" data-number="1.4.2">
@@ -2511,10 +2515,10 @@ vertical-align: -.125em;
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config user.name <span class="st">&quot;Your Name&quot;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> config user.email <span class="st">&quot;your.email@example.com&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
 <li><p><strong>Set up SSH keys</strong> (see Section 4 for detailed instructions)</p></li>
-<li><p><strong>Create machine-specific configuration:</strong></p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example config/config_local.yaml</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;base_dir: </span><span class="dt">\&quot;</span><span class="st">/path/to/your/project/data</span><span class="dt">\&quot;</span><span class="st">&quot;</span> <span class="op">&gt;</span> config/config_local.yaml</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;repo_dir: </span><span class="dt">\&quot;</span><span class="va">$PWD</span><span class="dt">\&quot;</span><span class="st">&quot;</span> <span class="op">&gt;&gt;</span> config/config_local.yaml</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p><strong>Initialize analysis folder</strong> (see detailed instructions in Section on Initialize the Project):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create your analysis folder with appropriate name</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/setup/init_project.sh <span class="at">-p</span> /path/to/parent <span class="at">-n</span> analysis_folder</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This will automatically create <code>config/config_local.yaml</code> with correct paths.</p></li>
 <li><p><strong>Start developing:</strong> Add your data paths, customize scripts, and begin analysis</p></li>
 </ol>
 <hr>
@@ -2966,7 +2970,7 @@ chmod 644 ~/.ssh/config</code></pre>
 <p>This script architecture: * Processes <strong>one sample</strong> only. * Is independent of SLURM (runs locally or in HPC). * Can be tested on macOS, then scaled via SLURM arrays. * Uses configuration via <code>load_config.sh</code>. * Can be adapted to any bioinformatics tool or workflow step.</p>
 </section>
 <section id="sample-list-file" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="sample-list-file"><span class="header-section-number">8.2</span> 8.2 Sample List File</h2>
+<h2 data-number="8.2" class="anchored" data-anchor-id="sample-list-file"><span class="header-section-number">8.2</span> Sample List File</h2>
 <p>Generate a file listing sample identifiers (or other items to analyze) from your data.</p>
 <p><strong>Script location:</strong> <code>scripts/utils/extract_samples_from_input.sh</code></p>
 <section id="what-it-does" class="level3" data-number="8.2.1">
@@ -2997,7 +3001,7 @@ SAMPLE_005</code></pre>
 </section>
 </section>
 <section id="slurm-array-jobs" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="slurm-array-jobs"><span class="header-section-number">8.3</span> 8.3 SLURM Array Jobs</h2>
+<h2 data-number="8.3" class="anchored" data-anchor-id="slurm-array-jobs"><span class="header-section-number">8.3</span> SLURM Array Jobs</h2>
 <p>Path: <code>scripts/slurm/01_analysis_array.sbatch</code></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=analysis_array</span></span>
@@ -3043,9 +3047,9 @@ SAMPLE_005</code></pre>
 </section>
 </section>
 <section id="storage-architecture-macos-home-fstrat-nas" class="level1" data-number="9">
-<h1 data-number="9"><span class="header-section-number">9</span> 9. Storage Architecture (macOS, HOME, fstrat, NAS)</h1>
+<h1 data-number="9"><span class="header-section-number">9</span> Storage Architecture (macOS, HOME, fstrat, NAS)</h1>
 <section id="summary" class="level2" data-number="9.1">
-<h2 data-number="9.1" class="anchored" data-anchor-id="summary"><span class="header-section-number">9.1</span> 9.1 Summary</h2>
+<h2 data-number="9.1" class="anchored" data-anchor-id="summary"><span class="header-section-number">9.1</span> Summary</h2>
 <ul>
 <li><strong>macOS:</strong> Development, testing, documentation.</li>
 <li><strong>HOME:</strong> Repository + lightweight files.</li>
@@ -3055,7 +3059,7 @@ SAMPLE_005</code></pre>
 <p>All scripts behave identically because they rely on <strong>BASE_DIR</strong> and <strong>REPO_DIR</strong>.</p>
 </section>
 <section id="fstrat-execution-workspace-per-run" class="level2" data-number="9.2">
-<h2 data-number="9.2" class="anchored" data-anchor-id="fstrat-execution-workspace-per-run"><span class="header-section-number">9.2</span> 9.2 fstrat Execution Workspace (Per-Run)</h2>
+<h2 data-number="9.2" class="anchored" data-anchor-id="fstrat-execution-workspace-per-run"><span class="header-section-number">9.2</span> fstrat Execution Workspace (Per-Run)</h2>
 <p>Within each run directory:</p>
 <pre><code>/fstrat/dmartin/my-analysis/run_20251209/
 │
@@ -3068,13 +3072,13 @@ SAMPLE_005</code></pre>
 <p>This ensures traceability without duplicating code.</p>
 </section>
 <section id="synchronizing-results-from-fstrat-to-nas" class="level2" data-number="9.3">
-<h2 data-number="9.3" class="anchored" data-anchor-id="synchronizing-results-from-fstrat-to-nas"><span class="header-section-number">9.3</span> 9.3 Synchronizing Results from fstrat to NAS</h2>
+<h2 data-number="9.3" class="anchored" data-anchor-id="synchronizing-results-from-fstrat-to-nas"><span class="header-section-number">9.3</span> Synchronizing Results from fstrat to NAS</h2>
 <p>After execution:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-av</span> /fstrat/.../2_ANALYSES/ /NAS/my-analysis/2_ANALYSES/</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>This pattern allows: * Fast execution on cluster. * Durable storage on NAS. * Clean reproducibility.</p>
 </section>
 <section id="environment-dependent-configuration" class="level2" data-number="9.4">
-<h2 data-number="9.4" class="anchored" data-anchor-id="environment-dependent-configuration"><span class="header-section-number">9.4</span> 9.4 Environment-Dependent Configuration</h2>
+<h2 data-number="9.4" class="anchored" data-anchor-id="environment-dependent-configuration"><span class="header-section-number">9.4</span> Environment-Dependent Configuration</h2>
 <p>Only two variables change across machines:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">base_dir</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;path/to/data_and_results&quot;</span><span class="co">   # fstrat, NAS, or local path</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">repo_dir</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;path/to/repository&quot;</span><span class="co">         # HOME on cluster, local path on macOS</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -3083,14 +3087,53 @@ SAMPLE_005</code></pre>
 </section>
 </section>
 <section id="initialize-the-project" class="level1" data-number="10">
-<h1 data-number="10"><span class="header-section-number">10</span> 10. Initialize the Project</h1>
+<h1 data-number="10"><span class="header-section-number">10</span> Initialize the Project</h1>
 <p>Use <code>scripts/setup/init_project.sh</code> to create folders and templates:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/setup/init_project.sh</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>This script will: - Create base folders (<code>1_DATA</code>, <code>2_ANALYSES</code>, <code>3_FIGURES</code>, etc.) - Copy script templates - Create <code>config/config.yaml</code> and <code>config/config_local.yaml</code> if missing</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># View help and options</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/setup/init_project.sh <span class="at">--help</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Initialize project with specified parent path and folder name</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/setup/init_project.sh <span class="at">-p</span> <span class="op">&lt;</span>parent-path<span class="op">&gt;</span> -n <span class="op">&lt;</span>folder-name<span class="op">&gt;</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Example: Create analysis folder &#39;run_20260112&#39; in &#39;/fstrat/dmartin/sparrow-analysis&#39;</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/setup/init_project.sh <span class="at">-p</span> /fstrat/dmartin/sparrow-analysis <span class="at">-n</span> run_20260112</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>Required Arguments:</strong></p>
+<ul>
+<li><code>-p, --parent-path PATH</code>: Parent directory where the analysis folder will be created</li>
+<li><code>-n, --folder-name NAME</code>: Name of the analysis folder (e.g., <code>run_20260112</code>, <code>experiment_01</code>)</li>
+</ul>
+<p><strong>What the script does:</strong></p>
+<ol type="1">
+<li><p>Creates the analysis folder structure:</p>
+<pre><code>&lt;parent-path&gt;/&lt;folder-name&gt;/
+├── 1_DATA/              # Minimal replicated inputs
+└── 2_ANALYSES/
+    ├── Scripts/         # Symlink to repository scripts
+    └── Results/         # All outputs generated here</code></pre></li>
+<li><p>Creates a symbolic link: <code>2_ANALYSES/Scripts/</code> → repository <code>scripts/</code> folder</p></li>
+<li><p>Creates repository configuration files if missing:</p>
+<ul>
+<li><code>config/config.yaml</code> → shared, versioned configuration</li>
+<li><code>config/config_local.yaml</code> → private, machine-specific configuration</li>
+</ul></li>
+<li><p>Creates script templates in <code>scripts/templates/</code>:</p>
+<ul>
+<li><code>job_slurm_template.sh</code> → SLURM job template</li>
+<li><code>analysis_script_template.sh</code> → Generic analysis script</li>
+</ul></li>
+</ol>
+<p><strong>Structure Philosophy:</strong></p>
+<ul>
+<li><strong>Repository folder</strong> (this repo): Contains scripts, config, docs (version-controlled)</li>
+<li><strong>Analysis folder</strong> (created by script): Contains data and results (not version-controlled)</li>
+<li><strong>Separation of concerns</strong>: Code vs. Data</li>
+<li><strong>Portability</strong>: Only analysis folder location changes between machines</li>
+<li><strong>Symlink advantage</strong>: Scripts always up-to-date with repository changes</li>
+</ul>
 <hr>
 </section>
 <section id="best-practices" class="level1" data-number="11">
-<h1 data-number="11"><span class="header-section-number">11</span> 11. Best Practices</h1>
+<h1 data-number="11"><span class="header-section-number">11</span> Best Practices</h1>
 <ul>
 <li>Always <code>source scripts/utils/load_config.sh</code> at the start of analysis scripts.</li>
 <li>Never modify <code>1_DATA/</code> during analyses; write outputs to <code>2_ANALYSES/</code>.</li>
@@ -3103,7 +3146,7 @@ SAMPLE_005</code></pre>
 <hr>
 </section>
 <section id="summary-1" class="level1" data-number="12">
-<h1 data-number="12"><span class="header-section-number">12</span> 12. Summary</h1>
+<h1 data-number="12"><span class="header-section-number">12</span> Summary</h1>
 <ul>
 <li><code>config.yaml</code> → shared, versioned, general settings.</li>
 <li><code>config_local.yaml</code> → local, private, machine-specific.</li>
@@ -3117,9 +3160,20 @@ SAMPLE_005</code></pre>
 <hr>
 </section>
 <section id="next-steps" class="level1" data-number="13">
-<h1 data-number="13"><span class="header-section-number">13</span> 13. Next Steps</h1>
-<p>Before you start: - <strong>Configure SSH keys</strong> for secure, password-free access to GitHub, cluster, and NAS (see Section 4). - <strong>Set up <code>.ssh/config</code></strong> to manage multiple connections efficiently. - <strong>Install VS Code Remote-SSH</strong> for seamless cluster interaction.</p>
-<p>For your project: - Adapt scripts to your specific analysis pipeline. - Add workflows (Snakemake/Nextflow) for complex dependencies. - Create reproducible environments (<code>environment.yml</code>, <code>renv.lock</code>, or <code>requirements.txt</code>). - Document analysis steps and parameters in Quarto reports.</p>
+<h1 data-number="13"><span class="header-section-number">13</span> Next Steps</h1>
+<p>Before you start:</p>
+<ul>
+<li><p><strong>Configure SSH keys</strong> for secure, password-free access to GitHub, cluster, and NAS (see Section 4).</p></li>
+<li><p><strong>Set up <code>.ssh/config</code></strong> to manage multiple connections efficiently.</p></li>
+<li><p><strong>Install VS Code Remote-SSH</strong> for seamless cluster interaction.</p></li>
+</ul>
+<p>For your project:</p>
+<ul>
+<li><p>Adapt scripts to your specific analysis pipeline.</p></li>
+<li><p>Add workflows (Snakemake/Nextflow) for complex dependencies.</p></li>
+<li><p>Create reproducible environments (<code>environment.yml</code>, <code>renv.lock</code>, or <code>requirements.txt</code>).</p></li>
+<li><p>Document analysis steps and parameters in Quarto reports.</p></li>
+</ul>
 </section>
 
 </main>

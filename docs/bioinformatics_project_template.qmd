@@ -97,16 +97,16 @@ This repository is configured as a **GitHub Template Repository**, which allows 
    - Edit `config/config.yaml`: Adjust paths and parameters for your analysis type
    - Create `config/config_local.yaml`: Add your machine-specific paths
    - Update `docs/`: Rename QMD files and customize documentation
-   - Adapt scripts in `scripts/bash/`: Rename and modify for your specific analysis steps
-   - Create sample list: Generate `config/samples_list.txt` with your sample identifiers
+   - Adapt scripts in `scripts/<step>/`: Rename and modify for your specific analysis steps
+   - Create sample list: Generate `config/samples_names.txt` with your sample identifiers
 
 4. **Initialize project structure:**
    ```bash
    # Specify parent path and analysis folder name
-   bash scripts/setup/init_project.sh -p /path/to/parent -n analysis_name
+   bash scripts/utils/init_project.sh -p /path/to/parent -n analysis_name
    
    # Example: Create analysis folder 'run_20260112' in your project area
-   bash scripts/setup/init_project.sh -p /fstrat/username/my-project -n run_20260112
+   bash scripts/utils/init_project.sh -p /fstrat/username/my-project -n run_20260112
    ```
 
 ### Advantages of Template Repository vs Manual Cloning
@@ -132,7 +132,7 @@ This repository is configured as a **GitHub Template Repository**, which allows 
 3. **Initialize analysis folder** (see detailed instructions in Section on Initialize the Project):
    ```bash
    # Create your analysis folder with appropriate name
-   bash scripts/setup/init_project.sh -p /path/to/parent -n analysis_folder
+   bash scripts/utils/init_project.sh -p /path/to/parent -n analysis_folder
    ```
    
    This will automatically create `config/config_local.yaml` with correct paths.
@@ -386,12 +386,19 @@ bioinfo-project-repo/
 │   └── config_local.yaml        # Local-only, ignored by Git
 │
 ├── scripts/
-│   ├── bash/                    # One-sample analysis scripts
-│   ├── slurm/                   # Job submission wrappers (HPC)
-│   ├── setup/
-│   │   └── init_project.sh      # Scaffolds folders and templates
-│   └── utils/
-│       └── load_config.sh       # Loads YAML configuration
+│   ├── utils/
+│   │   ├── init_project.sh      # Scaffolds folders and templates
+│   │   └── load_config.sh       # Loads YAML configuration
+│   ├── templates/               # Reusable script templates
+│   ├── 01_qc/                   # Quality control step
+│   │   ├── slurm_out/           # SLURM log files
+│   │   ├── 01_fastqc_one_sample.sh
+│   │   └── 01_fastqc_array.sbatch
+│   ├── 02_preprocessing/        # Preprocessing step
+│   │   ├── slurm_out/
+│   │   ├── 02_trim_one_sample.sh
+│   │   └── 02_trim_array.sbatch
+│   └── ...                      # Additional analysis steps
 │
 └── docs/
     └── bioinformatics_project_template.qmd  # Project documentation
@@ -556,9 +563,25 @@ Note: prefer creating these folders incrementally as bioinformatics analysis ste
 
 ## One-Sample Bash Scripts
 
-Path: `scripts/bash/01_analysis_one_sample.sh`
+Path: `scripts/<step>/<step>_one_sample.sh` (e.g., `scripts/01_qc/01_fastqc_one_sample.sh`)
 
-Example for a generic analysis step:
+Each script processes a **single sample** and is independent of SLURM. This enables:
+
+* **Local testing**: Test on macOS before cluster submission
+* **Reusability**: Same script runs locally or in HPC arrays
+* **Debugging**: Easy to troubleshoot single-sample issues
+
+### Usage
+
+```bash
+# Test locally
+bash scripts/01_qc/01_fastqc_one_sample.sh sample_1
+
+# This reads from: 1_DATA/FASTQ/sample_1*.fastq.gz
+# And writes to:  2_ANALYSES/Results/01_qc/
+```
+
+Example implementation:
 
 ```bash
 #!/bin/bash
@@ -638,13 +661,41 @@ Each line corresponds to one array task index and can represent any item to anal
 
 ## SLURM Array Jobs
 
-Path: `scripts/slurm/01_analysis_array.sbatch`
+Path: `scripts/<step>/<step>_array.sbatch` (e.g., `scripts/01_qc/01_fastqc_array.sbatch`)
+
+Array jobs run **one-sample scripts in parallel** on HPC clusters. The structure is simple:
+
+```
+scripts/<step>/
+├── slurm_out/                # Log files only
+├── <step>_one_sample.sh      # Bash script - process one sample
+└── <step>_array.sbatch       # SLURM script - submit array job
+```
+
+### Quick Start
 
 ```bash
+# Submit all samples as parallel tasks
+sbatch scripts/01_qc/01_fastqc_array.sbatch
+
+# Monitor
+squeue -j <job_id>
+tail -f scripts/01_qc/slurm_out/fastqc_array_<job_id>_1.out
+```
+
+### How It Works
+
+The array job:
+1. Reads sample names from `config/samples_names.txt`
+2. Creates N parallel SLURM tasks (N = sample count)
+3. Each task calls: `bash 01_fastqc_one_sample.sh <SAMPLE_ID>`
+4. Results are combined in `2_ANALYSES/Results/01_qc/`
+
+### Example SLURM Script
 #!/bin/bash
 #SBATCH --job-name=analysis_array
-#SBATCH --output=%x_%A_%a.out
-#SBATCH --error=%x_%A_%a.err
+#SBATCH -o slurm_out/%x_%A_%a.out
+#SBATCH -e slurm_out/%x_%A_%a.err
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=8G
 #SBATCH --time=02:00:00
@@ -656,13 +707,13 @@ cd "$REPO_ROOT" || exit 1
 
 source scripts/utils/load_config.sh
 
-SAMPLES_FILE="config/samples_list.txt"
+SAMPLES_FILE="config/samples_names.txt"
 ITEM_ID=$(sed -n "${SLURM_ARRAY_TASK_ID}p" "$SAMPLES_FILE")
 
 echo "Processing item: $ITEM_ID (array task ${SLURM_ARRAY_TASK_ID})"
 
-# Call your one-sample script
-bash scripts/bash/01_analysis_one_sample.sh "$ITEM_ID"
+# Call your one-sample script from the same directory
+bash scripts/01_qc/01_fastqc_one_sample.sh "$SAMPLE_ID"
 ```
 
 ### How it works
@@ -670,7 +721,7 @@ bash scripts/bash/01_analysis_one_sample.sh "$ITEM_ID"
 * `SLURM_ARRAY_TASK_ID` provides task index (starting from 1 by default).
 * `sed` extracts corresponding line from samples list.
 * Each task launches the Bash script on a different item.
-* Submit: `sbatch scripts/slurm/01_analysis_array.sbatch`
+* Submit: `sbatch scripts/01_qc/01_fastqc_array.sbatch`
 
 ### Benefits
 
@@ -741,17 +792,17 @@ All scripts use these paths indirectly through `load_config.sh`.
 
 # Initialize the Project
 
-Use `scripts/setup/init_project.sh` to create folders and templates:
+Use `scripts/utils/init_project.sh` to create folders and templates:
 
 ```bash
 # View help and options
-bash scripts/setup/init_project.sh --help
+bash scripts/utils/init_project.sh --help
 
 # Initialize project with specified parent path and folder name
-bash scripts/setup/init_project.sh -p <parent-path> -n <folder-name>
+bash scripts/utils/init_project.sh -p <parent-path> -n <folder-name>
 
 # Example: Create analysis folder 'run_20260112' in '/fstrat/dmartin/sparrow-analysis'
-bash scripts/setup/init_project.sh -p /fstrat/dmartin/sparrow-analysis -n run_20260112
+bash scripts/utils/init_project.sh -p /fstrat/dmartin/sparrow-analysis -n run_20260112
 ```
 
 **Required Arguments:**
@@ -777,8 +828,8 @@ bash scripts/setup/init_project.sh -p /fstrat/dmartin/sparrow-analysis -n run_20
    - `config/config_local.yaml` → private, machine-specific configuration
 
 4. Creates script templates in `scripts/templates/`:
-   - `job_slurm_template.sh` → SLURM job template
-   - `analysis_script_template.sh` → Generic analysis script
+   - `array_job_template.sbatch` → SLURM array job template
+   - `analysis_script_template.sh` → Generic one-sample script template
 
 **Structure Philosophy:**
 

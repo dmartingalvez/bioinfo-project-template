@@ -2,6 +2,7 @@
 
 A **generic, portable, and scalable template** for structuring any bioinformatics analysis project. Works seamlessly across **different analysis types** (RNA-seq, ChIP-seq, metagenomics, variant calling, single-cell, etc.) and **multiple computing environments** (macOS, HPC clusters, NAS storage).
 
+
 ## Key Features
 
 ✅ **Analysis-agnostic** - Works with any bioinformatics tool or workflow  

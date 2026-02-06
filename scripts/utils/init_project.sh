@@ -72,8 +72,14 @@ REPO_ROOT="${SCRIPT_DIR}/../.."
 cd "$REPO_ROOT"
 
 # Validate required arguments
-if [[ -z "$PARENT_PATH" ]] || [[ -z "$FOLDER_NAME" ]]; then
-  echo "ERROR: Both --parent-path and --folder-name are required" >&2
+if [[ -z "$PARENT_PATH" ]]; then
+  echo "ERROR: --parent-path is required" >&2
+  echo "Use --help for usage information" >&2
+  exit 1
+fi
+
+if [[ -z "$FOLDER_NAME" ]]; then
+  echo "ERROR: --folder-name is required" >&2
   echo "Use --help for usage information" >&2
   exit 1
 fi
@@ -102,13 +108,11 @@ else
   mkdir -p "$BASE_DIR"
 fi
 
-# Create base folders in repository
-mkdir -p config docs scripts/utils scripts/templates scripts/setup
-
 # Create analysis folder structure in base directory
 echo "Creating analysis folder structure..."
 mkdir -p "$BASE_DIR/1_DATA"
 mkdir -p "$BASE_DIR/2_ANALYSES/Results"
+mkdir -p "$BASE_DIR/logs"
 
 # Create symlink to repository scripts
 SCRIPTS_LINK="$BASE_DIR/2_ANALYSES/Scripts"
@@ -149,49 +153,6 @@ YAML
   echo "Created config/config_local.yaml"
 fi
 
-# Template load_config.sh if missing
-if [[ ! -f scripts/utils/load_config.sh ]]; then
-  cat > scripts/utils/load_config.sh <<'BASH'
-#!/usr/bin/env bash
-set -euo pipefail
-
-MAIN_CONFIG="config/config.yaml"
-LOCAL_CONFIG="config/config_local.yaml"
-
-if [[ ! -f "$MAIN_CONFIG" || ! -f "$LOCAL_CONFIG" ]]; then
-  echo "ERROR: Missing config files in config/" >&2; exit 1
-fi
-
-# Require yq
-if ! command -v yq >/dev/null 2>&1; then
-  echo "ERROR: 'yq' is required. Install with: brew install yq" >&2
-  exit 1
-fi
-
-BASE_DIR=$(yq -r '.base_dir' "$LOCAL_CONFIG")
-REPO_DIR=$(yq -r '.repo_dir' "$LOCAL_CONFIG")
-if [[ "$BASE_DIR" == ~* ]]; then BASE_DIR="${BASE_DIR/#\~/$HOME}"; fi
-if [[ "$REPO_DIR" == ~* ]]; then REPO_DIR="${REPO_DIR/#\~/$HOME}"; fi
-
-DATA_REL=$(yq -r '.paths.data' "$MAIN_CONFIG")
-ANALYSES_REL=$(yq -r '.paths.analyses' "$MAIN_CONFIG")
-RESULTS_REL=$(yq -r '.paths.results' "$MAIN_CONFIG")
-
-DATA_DIR="$BASE_DIR/$DATA_REL"
-ANALYSES_DIR="$BASE_DIR/$ANALYSES_REL"
-RESULTS_DIR="$BASE_DIR/$RESULTS_REL"
-
-THREADS=$(yq -r '.cluster.threads' "$MAIN_CONFIG")
-MEMORY=$(yq -r '.cluster.memory' "$MAIN_CONFIG")
-QUEUE=$(yq -r '.cluster.queue' "$MAIN_CONFIG")
-BASH
-  chmod +x scripts/utils/load_config.sh
-  echo "Created scripts/utils/load_config.sh"
-fi
-
-# Templates directory scripts
-mkdir -p scripts/templates
-
 # Generic job template (SLURM)
 cat > scripts/templates/job_slurm_template.sh <<'BASH'
 #!/usr/bin/env bash
@@ -205,7 +166,7 @@ cat > scripts/templates/job_slurm_template.sh <<'BASH'
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="${SCRIPT_DIR}/.."
+REPO_ROOT="${SCRIPT_DIR}/../.."
 cd "$REPO_ROOT"
 
 source scripts/utils/load_config.sh
@@ -221,7 +182,7 @@ cat > scripts/templates/analysis_script_template.sh <<'BASH'
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="${SCRIPT_DIR}/.."
+REPO_ROOT="${SCRIPT_DIR}/../.."
 cd "$REPO_ROOT"
 
 source scripts/utils/load_config.sh

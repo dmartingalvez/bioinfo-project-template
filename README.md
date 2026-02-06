@@ -119,7 +119,8 @@ This template is designed to be **forked or cloned** as the basis for your proje
 
 ## Key Resources
 
-- **Complete Documentation**: [docs/bioinformatics_project_template.qmd](docs/bioinformatics_project_template.qmd)
+<!--  **Complete Documentation**: [docs/bioinformatics_project_template.qmd](docs/bioinformatics_project_template.qmd) -->
+- **[Complete Documentation**:](https://dmartingalvez.github.io/bioinfo-project-template/bioinformatics_project_template.html)
 - **Configuration System**: See Section 6 in the guide
 - **SSH Setup**: See Section 4 in the guide
 - **Creating Your Project**: See "Creating a Repository for Your Specific Project" in the guide

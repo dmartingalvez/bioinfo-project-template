@@ -1,0 +1,46 @@
+Mon 12 Jan 2026 03:30:07 PM CET picasso inicia java -Xmx2000m -Dfastqc.output_dir=/mnt2/fscratch/users/dba_001_uma/dmartin/bioinfo-project-template/2_ANALYSES/Results/01_qc -Dfastqc.threads=8 -XX:ParallelGCThreads=1 -Djava.awt.headless=true uk.ac.babraham.FastQC.FastQCApplication /mnt2/fscratch/users/dba_001_uma/dmartin/bioinfo-project-template/1_DATA/FASTQ/12_22_1.fastq.gz /mnt2/fscratch/users/dba_001_uma/dmartin/bioinfo-project-template/1_DATA/FASTQ/12_22_2.fastq.gz
+Started analysis of 12_22_1.fastq.gz
+Started analysis of 12_22_2.fastq.gz
+Approx 5% complete for 12_22_2.fastq.gz
+Approx 5% complete for 12_22_1.fastq.gz
+Approx 10% complete for 12_22_2.fastq.gz
+Approx 10% complete for 12_22_1.fastq.gz
+Approx 15% complete for 12_22_2.fastq.gz
+Approx 15% complete for 12_22_1.fastq.gz
+Approx 20% complete for 12_22_2.fastq.gz
+Approx 20% complete for 12_22_1.fastq.gz
+Approx 25% complete for 12_22_2.fastq.gz
+Approx 25% complete for 12_22_1.fastq.gz
+Approx 30% complete for 12_22_2.fastq.gz
+Approx 30% complete for 12_22_1.fastq.gz
+Approx 35% complete for 12_22_2.fastq.gz
+Approx 35% complete for 12_22_1.fastq.gz
+Approx 40% complete for 12_22_2.fastq.gz
+Approx 40% complete for 12_22_1.fastq.gz
+Approx 45% complete for 12_22_2.fastq.gz
+Approx 45% complete for 12_22_1.fastq.gz
+Approx 50% complete for 12_22_2.fastq.gz
+Approx 50% complete for 12_22_1.fastq.gz
+Approx 55% complete for 12_22_2.fastq.gz
+Approx 55% complete for 12_22_1.fastq.gz
+Approx 60% complete for 12_22_2.fastq.gz
+Approx 60% complete for 12_22_1.fastq.gz
+Approx 65% complete for 12_22_2.fastq.gz
+Approx 65% complete for 12_22_1.fastq.gz
+Approx 70% complete for 12_22_2.fastq.gz
+Approx 70% complete for 12_22_1.fastq.gz
+Approx 75% complete for 12_22_2.fastq.gz
+Approx 75% complete for 12_22_1.fastq.gz
+Approx 80% complete for 12_22_2.fastq.gz
+Approx 80% complete for 12_22_1.fastq.gz
+Approx 85% complete for 12_22_2.fastq.gz
+Approx 85% complete for 12_22_1.fastq.gz
+Approx 90% complete for 12_22_2.fastq.gz
+Approx 90% complete for 12_22_1.fastq.gz
+Approx 95% complete for 12_22_2.fastq.gz
+Approx 95% complete for 12_22_1.fastq.gz
+
+real	4m5.426s
+user	7m45.746s
+sys	0m21.677s
+Mon 12 Jan 2026 03:34:12 PM CET picasso fin java -Xmx2000m -Dfastqc.output_dir=/mnt2/fscratch/users/dba_001_uma/dmartin/bioinfo-project-template/2_ANALYSES/Results/01_qc -Dfastqc.threads=8 -XX:ParallelGCThreads=1 -Djava.awt.headless=true uk.ac.babraham.FastQC.FastQCApplication /mnt2/fscratch/users/dba_001_uma/dmartin/bioinfo-project-template/1_DATA/FASTQ/12_22_1.fastq.gz /mnt2/fscratch/users/dba_001_uma/dmartin/bioinfo-project-template/1_DATA/FASTQ/12_22_2.fastq.gz
